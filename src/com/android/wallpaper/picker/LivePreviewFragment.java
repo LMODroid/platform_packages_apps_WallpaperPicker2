@@ -69,6 +69,7 @@ import com.android.wallpaper.R;
 import com.android.wallpaper.model.SetWallpaperViewModel;
 import com.android.wallpaper.model.WallpaperInfo.ColorInfo;
 import com.android.wallpaper.module.LargeScreenMultiPanesChecker;
+import com.android.wallpaper.module.WallpaperPersister.Destination;
 import com.android.wallpaper.util.FullScreenAnimation;
 import com.android.wallpaper.util.ResourceUtils;
 import com.android.wallpaper.util.ScreenSizeCalculator;
@@ -482,9 +483,9 @@ public class LivePreviewFragment extends PreviewFragment implements
     }
 
     @Override
-    protected void setCurrentWallpaper(int destination) {
+    protected void setCurrentWallpaper(@Destination int destination) {
         mWallpaperSetter.setCurrentWallpaper(getActivity(), mWallpaper, null,
-                destination, 0, null,
+                destination, false, null, 0, null,
                 mWallpaperColors != null ? mWallpaperColors : getColorInfo().getWallpaperColors(),
                 SetWallpaperViewModel.getCallback(mViewModelProvider));
     }

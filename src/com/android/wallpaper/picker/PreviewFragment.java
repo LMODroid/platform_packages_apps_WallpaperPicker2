@@ -366,7 +366,7 @@ public abstract class PreviewFragment extends AppbarFragment implements
     protected abstract boolean isLoaded();
 
     @Override
-    public void onSet(int destination) {
+    public void onSet(@Destination int destination) {
         mSetWallpaperViewModel.setDestination(destination);
         setCurrentWallpaper(destination);
     }
@@ -377,9 +377,8 @@ public abstract class PreviewFragment extends AppbarFragment implements
     }
 
     @Override
-    public void onClickTryAgain(@Destination int wallpaperDestination) {
-        mSetWallpaperViewModel.setDestination(wallpaperDestination);
-        setCurrentWallpaper(wallpaperDestination);
+    public void onClickTryAgain(@Destination int destination) {
+        onSet(destination);
     }
 
     @Override

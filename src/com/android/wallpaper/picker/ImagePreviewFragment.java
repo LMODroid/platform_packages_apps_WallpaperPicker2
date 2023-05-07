@@ -22,12 +22,14 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 
 import static com.android.wallpaper.util.WallpaperSurfaceCallback.LOW_RES_BITMAP_BLUR_RADIUS;
 import static com.android.wallpaper.widget.BottomActionBar.BottomAction.APPLY;
+import static com.android.wallpaper.widget.BottomActionBar.BottomAction.CUSTOMIZE;
 import static com.android.wallpaper.widget.BottomActionBar.BottomAction.EDIT;
 import static com.android.wallpaper.widget.BottomActionBar.BottomAction.INFORMATION;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.WallpaperColors;
 import android.content.Context;
 import android.content.res.Resources;
@@ -71,6 +73,7 @@ import com.android.wallpaper.module.Injector;
 import com.android.wallpaper.module.InjectorProvider;
 import com.android.wallpaper.module.LargeScreenMultiPanesChecker;
 import com.android.wallpaper.module.WallpaperPersister.Destination;
+import com.android.wallpaper.module.WallpaperPersister.WallpaperPosition;
 import com.android.wallpaper.module.WallpaperPreferences;
 import com.android.wallpaper.util.DisplayUtils;
 import com.android.wallpaper.util.FullScreenAnimation;
@@ -88,6 +91,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -129,6 +133,7 @@ public class ImagePreviewFragment extends PreviewFragment {
     private boolean mIsSurfaceCreated = false;
     private WallpaperColors mWallpaperColors;
     private WallpaperPreferences mWallpaperPreferences;
+    private FitStrategy mFitStrategy = FitStrategy.AS_PREVIEW;
 
     protected SurfaceView mWorkspaceSurface;
     protected WorkspaceSurfaceHolderCallback mWorkspaceSurfaceCallback;
@@ -272,6 +277,19 @@ public class ImagePreviewFragment extends PreviewFragment {
         mWorkspaceSurfaceCallback.cleanUp();
     }
 
+    private void onChangeFitStrategyClicked() {
+        final AtomicInteger selected = new AtomicInteger(mFitStrategy.ordinal());
+        final AlertDialog alertDialog = new AlertDialog.Builder(getContext())
+                .setTitle(R.string.fit_strategy)
+                .setSingleChoiceItems(Arrays.stream(FitStrategy.values()).map(v -> getContext().getString(v.toAndroidString())).toArray(String[]::new), selected.get(),
+                            (dialog, which) -> selected.set(which))
+                .setOnDismissListener(dialog -> mBottomActionBar.deselectAction(CUSTOMIZE))
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> mFitStrategy = FitStrategy.values()[selected.get()])
+                .setNegativeButton(android.R.string.cancel, null /* listener */)
+                .create();
+        alertDialog.show();
+    }
+
     protected void setupActionBar() {
         mBottomActionBar.bindBottomSheetContentWithAction(
                 new WallpaperInfoContent(getContext()), INFORMATION);
@@ -279,12 +297,14 @@ public class ImagePreviewFragment extends PreviewFragment {
         LargeScreenMultiPanesChecker checker = new LargeScreenMultiPanesChecker();
         if (activity != null
                 && (activity.isInMultiWindowMode() || checker.isMultiPanesEnabled(getContext()))) {
-            mBottomActionBar.showActionsOnly(INFORMATION, APPLY);
+            mBottomActionBar.showActionsOnly(INFORMATION, CUSTOMIZE, APPLY);
         } else {
-            mBottomActionBar.showActionsOnly(INFORMATION, EDIT, APPLY);
+            mBottomActionBar.showActionsOnly(INFORMATION, CUSTOMIZE, EDIT, APPLY);
         }
         mBottomActionBar.setActionClickListener(APPLY,
                 unused -> onSetWallpaperClicked(null, mWallpaper));
+        mBottomActionBar.setActionClickListener(CUSTOMIZE,
+                unused -> onChangeFitStrategyClicked());
     }
 
     @Override
@@ -568,17 +588,20 @@ public class ImagePreviewFragment extends PreviewFragment {
 
     @Override
     protected void setCurrentWallpaper(@Destination int destination) {
+        boolean highQuality = mFitStrategy.isHighQuality();
+        @WallpaperPosition Integer wallpaperPosition = mFitStrategy.toWallpaperPosition();
         Rect cropRect = calculateCropRect(getContext());
-        float screenScale = WallpaperCropUtils.getScaleOfScreenResolution(
+        float screenScale = highQuality || wallpaperPosition != null ? 1f : WallpaperCropUtils.getScaleOfScreenResolution(
                 mFullResImageView.getScale(), cropRect, mWallpaperScreenSize.x,
                 mWallpaperScreenSize.y);
-        Rect scaledCropRect = new Rect(
+        float scale = highQuality || wallpaperPosition != null ? 1f : mFullResImageView.getScale() * screenScale;
+        Rect scaledCropRect = highQuality || wallpaperPosition != null ? null : new Rect(
                 Math.round((float) cropRect.left * screenScale),
                 Math.round((float) cropRect.top * screenScale),
                 Math.round((float) cropRect.right * screenScale),
                 Math.round((float) cropRect.bottom * screenScale));
         mWallpaperSetter.setCurrentWallpaper(getActivity(), mWallpaper, mWallpaperAsset,
-                destination, mFullResImageView.getScale() * screenScale, scaledCropRect,
+                destination, highQuality, wallpaperPosition, scale, scaledCropRect,
                 mWallpaperColors, SetWallpaperViewModel.getCallback(mViewModelProvider));
     }
 

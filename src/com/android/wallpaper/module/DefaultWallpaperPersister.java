@@ -24,9 +24,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -92,7 +96,7 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
     }
 
     @Override
-    public void setIndividualWallpaper(final WallpaperInfo wallpaper, Asset asset,
+    public void setIndividualWallpaper(final WallpaperInfo wallpaper, Asset asset, boolean highQuality,
             @Nullable Rect cropRect, float scale, @Destination final int destination,
             final SetWallpaperCallback callback) {
         // Set wallpaper without downscaling directly from an input stream if there's no crop rect
@@ -112,21 +116,44 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
         }
 
         // If no crop rect is specified but the wallpaper asset is not streamable, then fall back to
-        // using the device's display size.
+        // using the device's display size, unless high quality is enabled.
         if (cropRect == null) {
-            Display display = ((WindowManager) mAppContext.getSystemService(Context.WINDOW_SERVICE))
-                    .getDefaultDisplay();
-            Point screenSize = ScreenSizeCalculator.getInstance().getScreenSize(display);
-            asset.decodeBitmap(screenSize.x, screenSize.y, new BitmapReceiver() {
-                @Override
-                public void onBitmapDecoded(@Nullable Bitmap bitmap) {
-                    if (bitmap == null) {
-                        callback.onError(null /* throwable */);
-                        return;
+            if (highQuality) {
+                asset.decodeRawDimensions(null, new DimensionsReceiver() {
+                    @Override
+                    public void onDimensionsDecoded(@Nullable Point dimensions) {
+                        if (dimensions == null) {
+                            callback.onError(null);
+                            return;
+                        }
+
+                        asset.decodeBitmap(dimensions.x, dimensions.y, new BitmapReceiver() {
+                            @Override
+                            public void onBitmapDecoded(@Nullable Bitmap bitmap) {
+                                if (bitmap == null) {
+                                    callback.onError(null /* throwable */);
+                                    return;
+                                }
+                                setIndividualWallpaper(wallpaper, bitmap, destination, callback);
+                            }
+                        });
                     }
-                    setIndividualWallpaper(wallpaper, bitmap, destination, callback);
-                }
-            });
+                });
+            } else {
+                Display display = ((WindowManager) mAppContext.getSystemService(Context.WINDOW_SERVICE))
+                        .getDefaultDisplay();
+                Point screenSize = ScreenSizeCalculator.getInstance().getScreenSize(display);
+                asset.decodeBitmap(screenSize.x, screenSize.y, new BitmapReceiver() {
+                    @Override
+                    public void onBitmapDecoded(@Nullable Bitmap bitmap) {
+                        if (bitmap == null) {
+                            callback.onError(null /* throwable */);
+                            return;
+                        }
+                        setIndividualWallpaper(wallpaper, bitmap, destination, callback);
+                    }
+                });
+            }
             return;
         }
 
@@ -145,13 +172,12 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
     }
 
     @Override
-    public void setIndividualWallpaperWithPosition(Activity activity, WallpaperInfo wallpaper,
-            @WallpaperPosition int wallpaperPosition, SetWallpaperCallback callback) {
+    public void setIndividualWallpaperWithPosition(Activity activity, WallpaperInfo wallpaper, Asset asset,
+            @Destination int destination, @WallpaperPosition int wallpaperPosition, SetWallpaperCallback callback) {
         Display display = ((WindowManager) mAppContext.getSystemService(Context.WINDOW_SERVICE))
                 .getDefaultDisplay();
         Point screenSize = ScreenSizeCalculator.getInstance().getScreenSize(display);
 
-        Asset asset = wallpaper.getAsset(activity);
         asset.decodeRawDimensions(activity, new DimensionsReceiver() {
             @Override
             public void onDimensionsDecoded(@Nullable Point dimensions) {
@@ -167,13 +193,13 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
                     // around it to fill a new screen-sized bitmap with plain black pixels.
                     case WALLPAPER_POSITION_CENTER:
                         setIndividualWallpaperWithCenterPosition(
-                                wallpaper, asset, dimensions, screenSize, callback);
+                                wallpaper, asset, destination, dimensions, screenSize, callback);
                         break;
 
                     // Crop out a screen-size portion of the source image and set the bitmap region.
                     case WALLPAPER_POSITION_CENTER_CROP:
                         setIndividualWallpaperWithCenterCropPosition(
-                                wallpaper, asset, dimensions, screenSize, callback);
+                                wallpaper, asset, destination, dimensions, screenSize, callback);
                         break;
 
                     // Decode full bitmap sized for screen and stretch it to fill the screen
@@ -184,9 +210,14 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
                             public void onBitmapDecoded(@Nullable Bitmap bitmap) {
                                 setIndividualWallpaperStretch(wallpaper, bitmap,
                                         screenSize /* stretchSize */,
-                                        WallpaperPersister.DEST_BOTH, callback);
+                                        destination, callback);
                             }
                         });
+                        break;
+
+                    case WALLPAPER_POSITION_TEXTURE:
+                        setIndividualWallpaperWithTexturePosition(
+                                wallpaper, asset, destination, dimensions, screenSize, callback);
                         break;
 
                     default:
@@ -199,7 +230,7 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
     }
 
     /**
-     * Sets an individual wallpaper to both home + lock static wallpaper destinations with a center
+     * Sets an individual wallpaper to static wallpaper destinations with a center
      * wallpaper position.
      *
      * @param wallpaper  The wallpaper model object representing the wallpaper to be set.
@@ -209,7 +240,7 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
      * @param callback   Callback used to notify original caller of wallpaper set operation result.
      */
     private void setIndividualWallpaperWithCenterPosition(WallpaperInfo wallpaper, Asset asset,
-            Point dimensions, Point screenSize, SetWallpaperCallback callback) {
+            @Destination int destination, Point dimensions, Point screenSize, SetWallpaperCallback callback) {
         if (dimensions.x >= screenSize.x && dimensions.y >= screenSize.y) {
             Rect cropRect = new Rect(
                     (dimensions.x - screenSize.x) / 2,
@@ -218,7 +249,7 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
                     dimensions.y - ((dimensions.y - screenSize.y) / 2));
             asset.decodeBitmapRegion(cropRect, screenSize.x, screenSize.y, false,
                     bitmap -> setIndividualWallpaper(wallpaper, bitmap,
-                            WallpaperPersister.DEST_BOTH, callback));
+                            destination, callback));
         } else {
             // Decode the full bitmap and pass with the screen size as a fill rect.
             asset.decodeBitmap(dimensions.x, dimensions.y, new BitmapReceiver() {
@@ -230,14 +261,14 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
                     }
 
                     setIndividualWallpaperFill(wallpaper, bitmap, screenSize /* fillSize */,
-                            WallpaperPersister.DEST_BOTH, callback);
+                            destination, callback);
                 }
             });
         }
     }
 
     /**
-     * Sets an individual wallpaper to both home + lock static wallpaper destinations with a center
+     * Sets an individual wallpaper to static wallpaper destinations with a center
      * cropped wallpaper position.
      *
      * @param wallpaper  The wallpaper model object representing the wallpaper to be set.
@@ -247,7 +278,7 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
      * @param callback   Callback used to notify original caller of wallpaper set operation result.
      */
     private void setIndividualWallpaperWithCenterCropPosition(WallpaperInfo wallpaper, Asset asset,
-            Point dimensions, Point screenSize, SetWallpaperCallback callback) {
+            @Destination int destination, Point dimensions, Point screenSize, SetWallpaperCallback callback) {
         float scale = Math.max((float) screenSize.x / dimensions.x,
                 (float) screenSize.y / dimensions.y);
 
@@ -262,7 +293,50 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
                 scaledImageHeight - (((scaledImageHeight - screenSize.y) / 2)));
 
         setIndividualWallpaper(
-                wallpaper, asset, cropRect, scale, WallpaperPersister.DEST_BOTH, callback);
+                wallpaper, asset, false, cropRect, scale, destination, callback);
+    }
+
+    /**
+     * Sets an individual wallpaper to static wallpaper destinations with a texture
+     * wallpaper position.
+     *
+     * @param wallpaper  The wallpaper model object representing the wallpaper to be set.
+     * @param asset      The wallpaper asset that should be used to set a wallpaper.
+     * @param dimensions Raw dimensions of the wallpaper asset.
+     * @param screenSize Dimensions of the device screen.
+     * @param callback   Callback used to notify original caller of wallpaper set operation result.
+     */
+    private void setIndividualWallpaperWithTexturePosition(WallpaperInfo wallpaper, Asset asset,
+            @Destination int destination, Point dimensions, Point screenSize, SetWallpaperCallback callback) {
+        if (dimensions.x >= screenSize.x && dimensions.y >= screenSize.y) {
+            Rect cropRect = new Rect(
+                    (dimensions.x - screenSize.x) / 2,
+                    (dimensions.y - screenSize.y) / 2,
+                    dimensions.x - ((dimensions.x - screenSize.x) / 2),
+                    dimensions.y - ((dimensions.y - screenSize.y) / 2));
+            asset.decodeBitmapRegion(cropRect, screenSize.x, screenSize.y, false,
+                    bitmap -> setIndividualWallpaper(wallpaper, bitmap,
+                            destination, callback));
+        } else {
+            // Decode the full bitmap and pass with the screen size as a texture rect.
+            asset.decodeBitmap(dimensions.x, dimensions.y, new BitmapReceiver() {
+                @Override
+                public void onBitmapDecoded(@Nullable Bitmap bitmap) {
+                    if (bitmap == null) {
+                        callback.onError(null);
+                        return;
+                    }
+                    final Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
+                    final Shader mShader1 = new BitmapShader(bitmap.copy(Bitmap.Config.ARGB_8888, true), Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
+                    paint.setShader(mShader1);
+                    final int maxSize = Math.max(screenSize.x, screenSize.y);
+                    final Bitmap output = Bitmap.createBitmap(maxSize, maxSize, Bitmap.Config.ARGB_8888);
+                    final Canvas cv = new Canvas(output);
+                    cv.drawPaint(paint);
+                    setIndividualWallpaper(wallpaper, output, destination, callback);
+                }
+            });
+        }
     }
 
     /**
@@ -677,10 +751,10 @@ public class DefaultWallpaperPersister implements WallpaperPersister {
             if (mBitmap != null) {
                 // Apply fill or stretch transformations on mBitmap if necessary.
                 if (mFillSize != null) {
-                    mBitmap = BitmapTransformer.applyFillTransformation(mBitmap, mFillSize);
+                    mBitmap = BitmapTransformer.applyFillTransformation(mBitmap.copy(Bitmap.Config.ARGB_8888, true), mFillSize);
                 }
                 if (mStretchSize != null) {
-                    mBitmap = Bitmap.createScaledBitmap(mBitmap, mStretchSize.x, mStretchSize.y,
+                    mBitmap = Bitmap.createScaledBitmap(mBitmap.copy(Bitmap.Config.ARGB_8888, true), mStretchSize.x, mStretchSize.y,
                             true);
                 }
 

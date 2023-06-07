@@ -56,6 +56,16 @@ public interface PartnerProvider {
     String RES_DEFAULT_WALLPAPER_HIDDEN = "default_wallpapper_hidden";
 
     /**
+     * The resource ID in the partner APK for its default wallpaper attribution in string-array format.
+     */
+    String RES_DEFAULT_ATTRIBUTIONS = "default_wallpaper_attributions";
+
+    /**
+     * The resource ID in the partner APK for its default wallpaper explore URL in string format.
+     */
+    String RES_DEFAULT_EXPLORE = "default_wallpaper_explore_url";
+
+    /**
      * Returns the Resources object for the partner APK, or null if there is no partner APK on the
      * device.
      */

@@ -25,6 +25,8 @@ import com.android.wallpaper.R;
 import com.android.wallpaper.asset.Asset;
 import com.android.wallpaper.asset.BuiltInWallpaperAsset;
 import com.android.wallpaper.asset.ResourceAsset;
+import com.android.wallpaper.module.InjectorProvider;
+import com.android.wallpaper.module.PartnerProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,7 +57,50 @@ public class DefaultWallpaperInfo extends WallpaperInfo {
 
     @Override
     public List<String> getAttributions(Context context) {
-        return Arrays.asList(context.getResources().getString(R.string.fallback_wallpaper_title));
+        PartnerProvider partnerProvider = InjectorProvider.getInjector().getPartnerProvider(context);
+
+        List<String> wallpaperInfos = Arrays.asList(context.getResources().getString(R.string.fallback_wallpaper_title));
+
+        final Resources partnerRes = partnerProvider.getResources();
+        final String packageName = partnerProvider.getPackageName();
+        if (partnerRes == null) {
+            return wallpaperInfos;
+        }
+
+        final int resId = partnerRes.getIdentifier(PartnerProvider.RES_DEFAULT_ATTRIBUTIONS, "array",
+                packageName);
+        // Certain partner configurations don't have attributions provided, so need to check; return
+        // early if they are missing.
+        if (resId == 0) {
+            return wallpaperInfos;
+        }
+
+        final String[] extras = partnerRes.getStringArray(resId);
+        if (extras == null) {
+            return wallpaperInfos;
+        }
+
+        return Arrays.asList(extras);
+    }
+
+    public String getActionUrl(Context context) {
+        PartnerProvider partnerProvider = InjectorProvider.getInjector().getPartnerProvider(context);
+
+        final Resources partnerRes = partnerProvider.getResources();
+        final String packageName = partnerProvider.getPackageName();
+        if (partnerRes == null) {
+            return null;
+        }
+
+        final int resId = partnerRes.getIdentifier(PartnerProvider.RES_DEFAULT_EXPLORE, "string",
+                packageName);
+        // Certain partner configurations don't have attributions provided, so need to check; return
+        // early if they are missing.
+        if (resId == 0) {
+            return null;
+        }
+
+        return partnerRes.getString(resId);
     }
 
     @Override

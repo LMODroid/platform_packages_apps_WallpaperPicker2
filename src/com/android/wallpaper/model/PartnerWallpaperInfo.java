@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * Represents a wallpaper from the "partner customization" APK installed on the system.
  */
-public class PartnerWallpaperInfo extends DefaultWallpaperInfo {
+public class PartnerWallpaperInfo extends WallpaperInfo {
     public static final Creator<PartnerWallpaperInfo> CREATOR =
             new Creator<PartnerWallpaperInfo>() {
                 @Override

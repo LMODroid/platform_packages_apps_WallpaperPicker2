@@ -437,6 +437,10 @@ public class BottomActionBar extends FrameLayout {
         }
     }
 
+    public View getAction(BottomAction action) {
+        return mActionMap.get(action);
+    }
+
     /**
      * Focus the specific action.
      *

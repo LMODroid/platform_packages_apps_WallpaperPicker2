@@ -17,6 +17,7 @@ package com.android.wallpaper.picker;
 
 import static com.android.wallpaper.widget.BottomActionBar.BottomAction.APPLY;
 import static com.android.wallpaper.widget.BottomActionBar.BottomAction.EDIT;
+import static com.android.wallpaper.widget.BottomActionBar.BottomAction.INFORMATION;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -29,6 +30,7 @@ import android.graphics.drawable.RippleDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -62,6 +64,7 @@ import com.android.wallpaper.util.PreviewUtils;
 import com.android.wallpaper.util.ResourceUtils;
 import com.android.wallpaper.widget.BottomActionBar;
 import com.android.wallpaper.widget.BottomActionBar.BottomSheetContent;
+import com.android.wallpaper.widget.HighlightDialog;
 import com.android.wallpaper.widget.WallpaperInfoView;
 
 import com.google.android.material.tabs.TabLayout;
@@ -69,6 +72,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Base Fragment to display the UI for previewing an individual wallpaper
@@ -120,7 +124,9 @@ public abstract class PreviewFragment extends AppbarFragment implements
      */
     protected boolean mTestingModeEnabled;
 
+    private static boolean sSawInfoHighlight = false;
     protected WallpaperInfo mWallpaper;
+    private List<String> mAttrib = null;
     protected WallpaperPreviewBitmapTransformation mPreviewBitmapTransformation;
     protected WallpaperSetter mWallpaperSetter;
     protected UserEventLogger mUserEventLogger;
@@ -168,6 +174,9 @@ public abstract class PreviewFragment extends AppbarFragment implements
 
         mViewModelProvider = new ViewModelProvider(requireActivity());
         mSetWallpaperViewModel = mViewModelProvider.get(SetWallpaperViewModel.class);
+
+        sSawInfoHighlight = sSawInfoHighlight ||
+                !getContext().getResources().getBoolean(R.bool.show_extra_credit_hint);
     }
 
     @Override
@@ -247,6 +256,26 @@ public abstract class PreviewFragment extends AppbarFragment implements
                 }
             };
             getActivity().getOnBackPressedDispatcher().addCallback(this, mOnBackPressedCallback);
+        }
+
+        if (!sSawInfoHighlight) {
+            new Thread(() -> {
+                mAttrib = mWallpaper.getAttributions(getContext());
+                final boolean hasCredits = mAttrib.size() > 1;
+                if (hasCredits) {
+                    sSawInfoHighlight = true;
+                    Handler.getMain().post(() -> {
+                        View infoView = mBottomActionBar.getAction(INFORMATION);
+                        HighlightDialog.showOnceReady(infoView, () -> {
+                            View v = getLayoutInflater().inflate(R.layout.highlight_dialog_content, null);
+                            HighlightDialog d = new HighlightDialog(getContext(),
+                                Set.of(new Pair<>(infoView, v)), 25, 25, 25, 25,
+                                37.5f, 37.5f, 5f, 50, 25);
+                            d.show();
+                        });
+                    });
+                }
+            }).start();
         }
     }
 
@@ -565,6 +594,7 @@ public abstract class PreviewFragment extends AppbarFragment implements
         private void populateWallpaperInfo(WallpaperInfoView view) {
             view.populateWallpaperInfo(
                     mWallpaper,
+                    mAttrib,
                     mActionLabel,
                     WallpaperInfoHelper.shouldShowExploreButton(
                             getContext(), mExploreIntent),

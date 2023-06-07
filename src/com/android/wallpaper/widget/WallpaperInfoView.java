@@ -57,11 +57,12 @@ public class WallpaperInfoView extends LinearLayout {
 
     /** Populates wallpaper info. */
     public void populateWallpaperInfo(@NonNull WallpaperInfo wallpaperInfo,
+                                      List<String> attribs,
                                       CharSequence actionLabel,
                                       boolean shouldShowExploreButton,
                                       OnClickListener exploreButtonClickListener) {
         sExecutorService.execute(() -> {
-            final List<String> attributions = wallpaperInfo.getAttributions(getContext());
+            final List<String> attributions = attribs != null ? attribs : wallpaperInfo.getAttributions(getContext());
             new Handler(Looper.getMainLooper()).post(() -> {
                 // Reset wallpaper information UI
                 mTitle.setText(null);

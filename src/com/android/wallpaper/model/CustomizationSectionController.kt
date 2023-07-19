@@ -57,7 +57,6 @@ interface CustomizationSectionController<T : SectionView> {
      * It means that the creation of the controller can be expensive and we should avoid recreation
      * in conditions like the user switching between the home and lock screen.
      */
-    @JvmDefault
     fun shouldRetainInstanceWhenSwitchingTabs(): Boolean {
         return false
     }
@@ -71,7 +70,6 @@ interface CustomizationSectionController<T : SectionView> {
      * @param context The [Context] to inflate view.
      * @param params Parameters for the creation of the view.
      */
-    @JvmDefault
     fun createView(context: Context, params: ViewCreationParams): T {
         return createView(context)
     }
@@ -84,11 +82,11 @@ interface CustomizationSectionController<T : SectionView> {
     fun createView(context: Context): T
 
     /** Saves the view state for configuration changes. */
-    @JvmDefault fun onSaveInstanceState(savedInstanceState: Bundle) = Unit
+    fun onSaveInstanceState(savedInstanceState: Bundle) = Unit
 
     /** Releases the controller. */
-    @JvmDefault fun release() = Unit
+    fun release() = Unit
 
     /** Gets called when the section gets transitioned out. */
-    @JvmDefault fun onTransitionOut() = Unit
+    fun onTransitionOut() = Unit
 }

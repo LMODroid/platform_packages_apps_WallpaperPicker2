@@ -31,7 +31,6 @@ import com.android.wallpaper.model.WallpaperInfo;
 import com.android.wallpaper.module.UserEventLogger.WallpaperSetFailureReason;
 import com.android.wallpaper.module.WallpaperPersister.Destination;
 import com.android.wallpaper.module.WallpaperPersister.SetWallpaperCallback;
-import com.android.wallpaper.module.WallpaperPersister.WallpaperPosition;
 import com.android.wallpaper.picker.SetWallpaperDialogFragment;
 import com.android.wallpaper.picker.SetWallpaperDialogFragment.Listener;
 import com.android.wallpaper.util.ScreenSizeCalculator;
@@ -80,12 +79,11 @@ public class WallpaperSetter {
      *
      * @param containerActivity main Activity that owns the current fragment
      * @param wallpaper info for the actual wallpaper to set
-     * @param highQuality do not reencode bitmap
      * @param destination the wallpaper destination i.e. home vs. lockscreen vs. both.
      * @param callback optional callback to be notified when the wallpaper is set.
      */
     public void setCurrentWallpaper(Activity containerActivity, WallpaperInfo wallpaper,
-                                    boolean highQuality, @Destination final int destination,
+                                    @Destination final int destination,
                                     @Nullable SetWallpaperCallback callback) {
         Asset wallpaperAsset = wallpaper.getAsset(containerActivity.getApplicationContext());
         wallpaperAsset.decodeRawDimensions(containerActivity, dimensions -> {
@@ -98,13 +96,13 @@ public class WallpaperSetter {
             Point screenSize = ScreenSizeCalculator.getInstance().getScreenSize(defaultDisplay);
             Rect visibleRawWallpaperRect =
                     WallpaperCropUtils.calculateVisibleRect(dimensions, screenSize);
-            float wallpaperScale = highQuality ? 1 : WallpaperCropUtils.calculateMinZoom(dimensions, screenSize);
-            Rect cropRect = highQuality ? null : WallpaperCropUtils.calculateCropRect(
+            float wallpaperScale = WallpaperCropUtils.calculateMinZoom(dimensions, screenSize);
+            Rect cropRect = WallpaperCropUtils.calculateCropRect(
                     containerActivity.getApplicationContext(), defaultDisplay,
                     dimensions, visibleRawWallpaperRect, wallpaperScale);
 
             setCurrentWallpaper(containerActivity, wallpaper, wallpaperAsset, destination,
-                    highQuality, null, wallpaperScale, cropRect, null, callback);
+                    wallpaperScale, cropRect, null, callback);
         });
     }
 
@@ -115,8 +113,6 @@ public class WallpaperSetter {
      * @param wallpaper info for the actual wallpaper to set
      * @param wallpaperAsset  Wallpaper asset from which to retrieve image data.
      * @param destination The wallpaper destination i.e. home vs. lockscreen vs. both.
-     * @param highQuality do not reencode bitmap
-     * @param wallpaperPosition Crop strategy for fitting the wallpaper asset to the device display.
      * @param wallpaperScale Scaling factor applied to the source image before setting the
      *                       wallpaper to the device.
      * @param cropRect Desired crop area of the wallpaper in post-scale units. If null, then the
@@ -125,24 +121,13 @@ public class WallpaperSetter {
      */
     public void setCurrentWallpaper(Activity containerActivity, WallpaperInfo wallpaper,
             @Nullable Asset wallpaperAsset, @Destination final int destination,
-            boolean highQuality, @WallpaperPosition Integer wallpaperPosition, float wallpaperScale,
-            @Nullable Rect cropRect, WallpaperColors wallpaperColors, @Nullable SetWallpaperCallback callback) {
+            float wallpaperScale, @Nullable Rect cropRect, WallpaperColors wallpaperColors,
+            @Nullable SetWallpaperCallback callback) {
         if (wallpaper instanceof LiveWallpaperInfo) {
             setCurrentLiveWallpaper(containerActivity, (LiveWallpaperInfo) wallpaper, destination,
                     wallpaperColors, callback);
             return;
         }
-
-        if (highQuality && cropRect != null) {
-            throw new IllegalArgumentException("Cannot avoid re-encoding while cropping.");
-        }
-        if (highQuality && wallpaperPosition != null) {
-            throw new IllegalArgumentException("Cannot avoid re-encoding with wallpaper fit strategy.");
-        }
-        if (cropRect != null && wallpaperPosition != null) {
-            throw new IllegalArgumentException("Cannot override crop bounds with set wallpaper fit strategy.");
-        }
-
         mPreferences.setPendingWallpaperSetStatus(
                 WallpaperPreferences.WALLPAPER_SET_PENDING);
 
@@ -183,47 +168,25 @@ public class WallpaperSetter {
             mProgressDialog.show();
         }
 
-        if (wallpaperPosition != null) {
-            mWallpaperPersister.setIndividualWallpaperWithPosition(
-                    containerActivity, wallpaper, wallpaperAsset,
-                    destination, wallpaperPosition, new SetWallpaperCallback() {
-                        @Override
-                        public void onSuccess(WallpaperInfo wallpaperInfo) {
-                            onWallpaperApplied(wallpaper, containerActivity);
-                            if (callback != null) {
-                                callback.onSuccess(wallpaper);
-                            }
+        mWallpaperPersister.setIndividualWallpaper(
+                wallpaper, wallpaperAsset, cropRect,
+                wallpaperScale, destination, new SetWallpaperCallback() {
+                    @Override
+                    public void onSuccess(WallpaperInfo wallpaperInfo) {
+                        onWallpaperApplied(wallpaper, containerActivity);
+                        if (callback != null) {
+                            callback.onSuccess(wallpaper);
                         }
+                    }
 
-                        @Override
-                        public void onError(Throwable throwable) {
-                            onWallpaperApplyError(throwable, containerActivity);
-                            if (callback != null) {
-                                callback.onError(throwable);
-                            }
+                    @Override
+                    public void onError(Throwable throwable) {
+                        onWallpaperApplyError(throwable, containerActivity);
+                        if (callback != null) {
+                            callback.onError(throwable);
                         }
-                    });
-        } else {
-            mWallpaperPersister.setIndividualWallpaper(
-                    wallpaper, wallpaperAsset, highQuality, cropRect,
-                    wallpaperScale, destination, new SetWallpaperCallback() {
-                        @Override
-                        public void onSuccess(WallpaperInfo wallpaperInfo) {
-                            onWallpaperApplied(wallpaper, containerActivity);
-                            if (callback != null) {
-                                callback.onSuccess(wallpaper);
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                            onWallpaperApplyError(throwable, containerActivity);
-                            if (callback != null) {
-                                callback.onError(throwable);
-                            }
-                        }
-                    });
-        }
+                    }
+                });
     }
 
     private void setCurrentLiveWallpaper(Activity activity, LiveWallpaperInfo wallpaper,

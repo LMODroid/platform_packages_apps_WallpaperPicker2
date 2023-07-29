@@ -72,7 +72,7 @@ public class TestWallpaperPersister implements WallpaperPersister {
 
     @Override
     public void setIndividualWallpaper(final WallpaperInfo wallpaperInfo, Asset asset,
-            boolean highQuality, @Nullable final Rect cropRect, final float scale, final @Destination int destination,
+            @Nullable final Rect cropRect, final float scale, final @Destination int destination,
             final WallpaperPersister.SetWallpaperCallback callback) {
         asset.decodeBitmap(50, 50, bitmap -> {
             if (destination == DEST_HOME_SCREEN || destination == DEST_BOTH) {
@@ -97,7 +97,7 @@ public class TestWallpaperPersister implements WallpaperPersister {
 
     @Override
     public void setIndividualWallpaperWithPosition(Activity activity, WallpaperInfo wallpaper,
-            @Destination int destination, @WallpaperPosition int wallpaperPosition, SetWallpaperCallback callback) {
+            @WallpaperPosition int wallpaperPosition, SetWallpaperCallback callback) {
         wallpaper.getAsset(activity).decodeBitmap(50, 50, new BitmapReceiver() {
             @Override
             public void onBitmapDecoded(@Nullable Bitmap bitmap) {
@@ -112,7 +112,7 @@ public class TestWallpaperPersister implements WallpaperPersister {
                 mPrefs.setLockWallpaperAttributions(wallpaper.getAttributions(mAppContext));
                 mPrefs.setLockWallpaperRemoteId(wallpaper.getWallpaperId());
 
-                mDestination = destination;
+                mDestination = WallpaperPersister.DEST_BOTH;
                 mCallback = callback;
                 mWallpaperPosition = wallpaperPosition;
                 mWallpaperInfo = wallpaper;

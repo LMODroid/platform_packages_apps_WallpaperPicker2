@@ -212,7 +212,7 @@ public abstract class PreviewFragment extends AppbarFragment implements
                             mFullScreenAnimation.getStatusBarHeight(),
                             previewHeader.getPaddingRight(), previewHeader.getPaddingBottom());
 
-                    return windowInsets.consumeSystemWindowInsets();
+                    return windowInsets.CONSUMED;
                 }
         );
 

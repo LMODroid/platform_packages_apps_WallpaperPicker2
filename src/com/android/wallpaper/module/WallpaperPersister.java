@@ -43,6 +43,7 @@ public interface WallpaperPersister {
     int WALLPAPER_POSITION_CENTER = 0;
     int WALLPAPER_POSITION_CENTER_CROP = 1;
     int WALLPAPER_POSITION_STRETCH = 2;
+    int WALLPAPER_POSITION_TEXTURE = 3;
 
     /**
      * Sets a static individual wallpaper to the system via the WallpaperManager.
@@ -50,6 +51,7 @@ public interface WallpaperPersister {
      * @param wallpaper   Wallpaper model object. Wallpaper image will be set from the asset provided
      *                    to this method.
      * @param asset       Wallpaper asset from which to retrieve image data.
+     * @param highQuality do not reencode bitmap
      * @param cropRect    Desired crop area of the wallpaper in post-scale units. If null, then the
      *                    wallpaper image will be set without any scaling or cropping.
      * @param scale       Scaling factor applied to the source image before setting the wallpaper to the
@@ -57,7 +59,7 @@ public interface WallpaperPersister {
      * @param destination The destination - where to set the wallpaper to.
      * @param callback    Called once the wallpaper was set or if an error occurred.
      */
-    void setIndividualWallpaper(WallpaperInfo wallpaper, Asset asset, @Nullable Rect cropRect,
+    void setIndividualWallpaper(WallpaperInfo wallpaper, Asset asset, boolean highQuality, @Nullable Rect cropRect,
                                 float scale, @Destination int destination, SetWallpaperCallback callback);
 
     /**
@@ -70,7 +72,24 @@ public interface WallpaperPersister {
      * @param wallpaperPosition Crop strategy for fitting the wallpaper asset to the device display.
      * @param callback          Called once the wallpaper was set or if an error occurred.
      */
-    void setIndividualWallpaperWithPosition(Activity activity, WallpaperInfo wallpaper,
+    default void setIndividualWallpaperWithPosition(Activity activity, WallpaperInfo wallpaper,
+                                            @WallpaperPosition int wallpaperPosition, SetWallpaperCallback callback) {
+        Asset asset = wallpaper.getAsset(activity);
+        setIndividualWallpaperWithPosition(activity, wallpaper, asset, DEST_BOTH, wallpaperPosition, callback);
+    }
+
+    /**
+     * Sets a static individual wallpaper to the system with the provided wallpaper position
+     * preference to fit the device display.
+     *
+     * @param wallpaper         Wallpaper model object. Wallpaper image will be set from the asset provided
+     *                          by the wallpaper's default asset.
+     * @param asset             Wallpaper asset from which to retrieve image data.
+     * @param wallpaperPosition Crop strategy for fitting the wallpaper asset to the device display.
+     * @param destination       The destination - where to set the wallpaper to.
+     * @param callback          Called once the wallpaper was set or if an error occurred.
+     */
+    void setIndividualWallpaperWithPosition(Activity activity, WallpaperInfo wallpaper, Asset asste, @Destination int destination,
                                             @WallpaperPosition int wallpaperPosition, SetWallpaperCallback callback);
 
     /**

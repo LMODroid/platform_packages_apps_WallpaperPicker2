@@ -15,5 +15,12 @@
 -->
 
 <resources>
+    <string name="fit_strategy">Fit strategy</string>
+    <string name="fit_strategy_as_previewed">As previewed</string>
+    <string name="fit_strategy_high_quality">High quality</string>
+    <string name="fit_strategy_center">Center</string>
+    <string name="fit_strategy_crop">Crop</string>
+    <string name="fit_strategy_stretch">Stretch</string>
+    <string name="fit_strategy_texture">Texture</string>
     <string name="extra_credit_hint">Click here to find <b>more wallpapers</b> by this creator!</string>
 </resources>

@@ -32,10 +32,12 @@ object CropWallpaperButtonBinder {
     ) {
         lifecycleOwner.lifecycleScope.launch {
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.onCropButtonClick.collect { onCropButtonClick ->
-                    button.setOnClickListener {
-                        onCropButtonClick.invoke()
-                        navigate.invoke()
+                launch {
+                    viewModel.onCropButtonClick.collect { onCropButtonClick ->
+                        button.setOnClickListener {
+                            onCropButtonClick?.invoke()
+                            navigate.invoke()
+                        }
                     }
                 }
             }

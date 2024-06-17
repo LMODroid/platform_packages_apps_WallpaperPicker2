@@ -17,7 +17,7 @@
 
 package com.android.wallpaper.testing
 
-import com.android.wallpaper.settings.data.repository.SecureSettingsRepository
+import com.android.systemui.shared.settings.data.repository.SecureSettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -30,11 +30,15 @@ class FakeSecureSettingsRepository : SecureSettingsRepository {
         return settings.map { it.getOrDefault(name, defaultValue.toString()) }.map { it.toInt() }
     }
 
-    override suspend fun set(name: String, value: Int) {
+    override suspend fun setInt(name: String, value: Int) {
         settings.value = settings.value.toMutableMap().apply { this[name] = value.toString() }
     }
 
-    override suspend fun get(name: String, defaultValue: Int): Int {
+    override suspend fun getInt(name: String, defaultValue: Int): Int {
         return settings.value[name]?.toInt() ?: defaultValue
+    }
+
+    override suspend fun getString(name: String): String? {
+        return settings.value[name]
     }
 }

@@ -18,15 +18,17 @@ package com.android.wallpaper.module
 import android.app.WallpaperColors
 import android.app.WallpaperManager.SetWallpaperFlags
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.graphics.Rect
 import android.text.TextUtils
 import androidx.annotation.IntDef
 import com.android.wallpaper.model.LiveWallpaperInfo
-import com.android.wallpaper.model.StaticWallpaperMetadata
+import com.android.wallpaper.model.LiveWallpaperPrefMetadata
+import com.android.wallpaper.model.StaticWallpaperPrefMetadata
 import com.android.wallpaper.model.WallpaperInfo
-import com.android.wallpaper.model.wallpaper.ScreenOrientation
-import com.android.wallpaper.model.wallpaper.WallpaperModel
 import com.android.wallpaper.picker.customization.shared.model.WallpaperDestination
+import com.android.wallpaper.picker.data.WallpaperModel.LiveWallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.StaticWallpaperModel
 
 /** Interface for persisting and retrieving wallpaper specific preferences. */
 interface WallpaperPreferences {
@@ -62,7 +64,10 @@ interface WallpaperPreferences {
     fun clearHomeWallpaperMetadata()
 
     /** Set homescreen static image wallpaper metadata to SharedPreferences. */
-    fun setHomeStaticImageWallpaperMetadata(metadata: StaticWallpaperMetadata)
+    fun setHomeStaticImageWallpaperMetadata(metadata: StaticWallpaperPrefMetadata)
+
+    /** Set homescreen live wallpaper metadata to SharedPreferences. */
+    fun setHomeLiveWallpaperMetadata(metadata: LiveWallpaperPrefMetadata)
 
     /** Returns the home wallpaper's bitmap hash code or 0 if there is none. */
     fun getHomeWallpaperHashCode(): Long
@@ -133,7 +138,10 @@ interface WallpaperPreferences {
     fun clearLockWallpaperMetadata()
 
     /** Set lockscreen static image wallpaper metadata to SharedPreferences. */
-    fun setLockStaticImageWallpaperMetadata(metadata: StaticWallpaperMetadata)
+    fun setLockStaticImageWallpaperMetadata(metadata: StaticWallpaperPrefMetadata)
+
+    /** Set lockscreen live wallpaper metadata to SharedPreferences. */
+    fun setLockLiveWallpaperMetadata(metadata: LiveWallpaperPrefMetadata)
 
     /** Returns the lock screen wallpaper's bitmap hash code or 0 if there is none. */
     fun getLockWallpaperHashCode(): Long
@@ -373,7 +381,7 @@ interface WallpaperPreferences {
     )
 
     /**
-     * Add a static wallpaper to recent wallpapers as jason array, saved in preferences.
+     * Add a static wallpaper to recent wallpapers as json array, saved in preferences.
      *
      * @param destination destination where the wallpaper is set to
      * @param wallpaperModel static wallpaper model
@@ -382,16 +390,27 @@ interface WallpaperPreferences {
      */
     suspend fun addStaticWallpaperToRecentWallpapers(
         destination: WallpaperDestination,
-        wallpaperModel: WallpaperModel.StaticWallpaperModel,
+        wallpaperModel: StaticWallpaperModel,
         bitmap: Bitmap,
-        cropHints: Map<ScreenOrientation, Rect?>,
+        cropHints: Map<Point, Rect>?,
     )
 
-    /** Stores wallpaper crop hints for each dimensions. */
-    fun storeWallpaperCropHints(cropHints: Map<ScreenOrientation, Rect?>)
+    /**
+     * Add a live wallpaper to recent wallpapers as json array, saved in preferences.
+     *
+     * @param destination destination where the wallpaper is set to
+     * @param wallpaperModel live wallpaper model
+     */
+    suspend fun addLiveWallpaperToRecentWallpapers(
+        destination: WallpaperDestination,
+        wallpaperModel: LiveWallpaperModel,
+    )
 
-    /** Gets wallpaper crop hints for each dimensions. */
-    fun getWallpaperCropHints(): Map<ScreenOrientation, Rect?>
+    /** Sets whether the preview tooltip should be shown. */
+    fun setHasPreviewTooltipBeenShown(hasTooltipBeenShown: Boolean)
+
+    /** Gets whether the preview tooltip should be shown. */
+    fun getHasPreviewTooltipBeenShown(): Boolean
 
     /** The possible wallpaper presentation modes, i.e., either "static" or "rotating". */
     @IntDef(PRESENTATION_MODE_STATIC, PRESENTATION_MODE_ROTATING) annotation class PresentationMode

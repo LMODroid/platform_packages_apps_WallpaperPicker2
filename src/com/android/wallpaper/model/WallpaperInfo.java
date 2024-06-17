@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -29,9 +30,11 @@ import android.os.Parcelable;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IntDef;
+import androidx.annotation.Nullable;
 
 import com.android.wallpaper.asset.Asset;
-import com.android.wallpaper.model.wallpaper.ScreenOrientation;
+import com.android.wallpaper.config.BaseFlags;
+import com.android.wallpaper.module.InjectorProvider;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,7 +56,7 @@ public abstract class WallpaperInfo implements Parcelable {
 
     private PriorityQueue<String> mEffectNames = new PriorityQueue<>();
 
-    protected final HashMap<Integer, String> mCropHints = new HashMap<>();
+    protected final HashMap<String, String> mCropHints = new HashMap<>();
 
     public WallpaperInfo() {
     }
@@ -301,26 +304,33 @@ public abstract class WallpaperInfo implements Parcelable {
         return Resources.ID_NULL;
     }
 
-    /** Sets the crop {@link Rect} of each {@link ScreenOrientation} for this wallpaper. */
-    public void setWallpaperCropHints(Map<ScreenOrientation, Rect> cropHints) {
+    /** Sets the crop {@link Rect} of each displaySize for this wallpaper. */
+    public void setWallpaperCropHints(Map<Point, Rect> cropHints) {
         if (cropHints == null) {
             return;
         }
 
-        cropHints.forEach((orientation, rect) -> {
+        cropHints.forEach((displaySize, rect) -> {
             if (rect != null) {
-                mCropHints.put(orientation.ordinal(),
+                mCropHints.put(displaySize.flattenToString(),
                         rect.flattenToString());
             }
         });
     }
 
-    /** Returns the crop {@link Rect} of each {@link ScreenOrientation} for this wallpaper. */
-    public Map<ScreenOrientation, Rect> getWallpaperCropHints() {
-        Map<ScreenOrientation, Rect> cropHints = new HashMap<>();
+    /** Returns the crop {@link Rect} of each displaySize for this wallpaper. */
+    public @Nullable Map<Point, Rect> getWallpaperCropHints() {
+        BaseFlags flags = InjectorProvider.getInjector().getFlags();
+        boolean isMultiCropEnabled =
+                flags.isMultiCropPreviewUiEnabled() && flags.isMultiCropEnabled();
+        if (!isMultiCropEnabled) {
+            return null;
+        }
+
+        Map<Point, Rect> cropHints = new HashMap<>();
         mCropHints.forEach(
-                (orientation, rect) -> cropHints.put(
-                        ScreenOrientation.getEntries().get(orientation),
+                (displaySize, rect) -> cropHints.put(
+                        Point.unflattenFromString(displaySize),
                         Rect.unflattenFromString(rect)));
         return cropHints;
     }

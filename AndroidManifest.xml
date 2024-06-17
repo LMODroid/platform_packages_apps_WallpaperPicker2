@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- The package name here must match the Studio namespace given in
+     WallpaperPickerGoogle gradle config for Studio builds to succeed.
+     `package_name` in Android.bp overrides this with the actual package name.
+ -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:tools="http://schemas.android.com/tools"
-     package="com.android.wallpaper">
+     package="com.google.android.apps.wallpaper">
 
   <!-- Custom permission to enforce that only this app can notify the running live wallpaper that
              the rotating wallpaper image data changed. -->
@@ -21,6 +25,7 @@
   <uses-permission android:name="android.permission.BIND_WALLPAPER" />
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
   <uses-permission android:name="com.android.wallpaper.NOTIFY_ROTATING_WALLPAPER_CHANGED"/>
+  <uses-permission android:name="android.permission.SET_WALLPAPER_DIM_AMOUNT" />
 
   <queries>
       <!-- Specific intents Wallpaper picker query for -->

@@ -15,11 +15,15 @@
  */
 package com.android.wallpaper.picker.preview.ui.fragment
 
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.activityViewModels
@@ -33,8 +37,11 @@ import com.android.wallpaper.picker.preview.ui.binder.DualPreviewSelectorBinder
 import com.android.wallpaper.picker.preview.ui.binder.PreviewActionsBinder
 import com.android.wallpaper.picker.preview.ui.binder.PreviewSelectorBinder
 import com.android.wallpaper.picker.preview.ui.binder.SetWallpaperButtonBinder
+import com.android.wallpaper.picker.preview.ui.binder.SetWallpaperProgressDialogBinder
 import com.android.wallpaper.picker.preview.ui.fragment.smallpreview.DualPreviewViewPager
 import com.android.wallpaper.picker.preview.ui.fragment.smallpreview.views.TabsPagerContainer
+import com.android.wallpaper.picker.preview.ui.view.PreviewActionGroup
+import com.android.wallpaper.picker.preview.ui.viewmodel.Action
 import com.android.wallpaper.picker.preview.ui.viewmodel.WallpaperPreviewViewModel
 import com.android.wallpaper.util.DisplayUtils
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +62,7 @@ class SmallPreviewFragment : Hilt_SmallPreviewFragment() {
     @Inject lateinit var logger: UserEventLogger
 
     private val wallpaperPreviewViewModel by activityViewModels<WallpaperPreviewViewModel>()
+    private lateinit var setWallpaperProgressDialog: ProgressDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,12 +79,26 @@ class SmallPreviewFragment : Hilt_SmallPreviewFragment() {
             )
         setUpToolbar(view)
         bindScreenPreview(view)
+        bindPreviewActions(view)
 
         SetWallpaperButtonBinder.bind(
-            view.requireViewById(R.id.button_set_wallpaper),
+            button = view.requireViewById(R.id.button_set_wallpaper),
+            viewModel = wallpaperPreviewViewModel,
+            lifecycleOwner = viewLifecycleOwner,
         ) {
             findNavController().navigate(R.id.action_smallPreviewFragment_to_setWallpaperDialog)
         }
+        setWallpaperProgressDialog =
+            ProgressDialog(context, R.style.LightDialogTheme).apply {
+                setTitle(null)
+                setMessage(context.getString(R.string.set_wallpaper_progress_message))
+                isIndeterminate = true
+            }
+        SetWallpaperProgressDialogBinder.bind(
+            dialog = setWallpaperProgressDialog,
+            viewModel = wallpaperPreviewViewModel,
+            lifecycleOwner = viewLifecycleOwner,
+        )
 
         return view
     }
@@ -94,13 +116,7 @@ class SmallPreviewFragment : Hilt_SmallPreviewFragment() {
     }
 
     private fun bindScreenPreview(view: View) {
-        PreviewActionsBinder.bind(
-            view.requireViewById(R.id.action_button_group),
-            view.requireViewById(R.id.floating_sheet),
-            wallpaperPreviewViewModel.previewActionsViewModel,
-            viewLifecycleOwner,
-            logger,
-        )
+        val currentNavDestId = checkNotNull(findNavController().currentDestination?.id)
         if (displayUtils.hasMultiInternalDisplays()) {
             val dualPreviewView: DualPreviewViewPager =
                 view.requireViewById(R.id.dual_preview_pager)
@@ -113,6 +129,7 @@ class SmallPreviewFragment : Hilt_SmallPreviewFragment() {
                 appContext,
                 viewLifecycleOwner,
                 mainScope,
+                currentNavDestId,
             ) { sharedElement ->
                 ViewCompat.setTransitionName(sharedElement, SMALL_PREVIEW_SHARED_ELEMENT_ID)
                 val extras =
@@ -137,6 +154,7 @@ class SmallPreviewFragment : Hilt_SmallPreviewFragment() {
                 appContext,
                 viewLifecycleOwner,
                 mainScope,
+                currentNavDestId,
             ) { sharedElement ->
                 ViewCompat.setTransitionName(sharedElement, SMALL_PREVIEW_SHARED_ELEMENT_ID)
                 val extras =
@@ -152,8 +170,67 @@ class SmallPreviewFragment : Hilt_SmallPreviewFragment() {
         }
     }
 
+    private fun bindPreviewActions(view: View) {
+        val shareActivityResult =
+            registerForActivityResult(
+                object : ActivityResultContract<Intent, Int>() {
+                    override fun createIntent(context: Context, input: Intent): Intent {
+                        return input
+                    }
+
+                    override fun parseResult(resultCode: Int, intent: Intent?): Int {
+                        return resultCode
+                    }
+                },
+            ) {
+                view
+                    .findViewById<PreviewActionGroup>(R.id.action_button_group)
+                    ?.setIsChecked(Action.SHARE, false)
+            }
+        PreviewActionsBinder.bind(
+            actionGroup = view.requireViewById(R.id.action_button_group),
+            floatingSheet = view.requireViewById(R.id.floating_sheet),
+            previewViewModel = wallpaperPreviewViewModel,
+            actionsViewModel = wallpaperPreviewViewModel.previewActionsViewModel,
+            displaySize = displayUtils.getRealSize(requireActivity().display),
+            lifecycleOwner = viewLifecycleOwner,
+            logger = logger,
+            onStartEditActivity = {
+                findNavController()
+                    .navigate(
+                        resId = R.id.action_smallPreviewFragment_to_fullPreviewFragment,
+                        args = Bundle().apply { putParcelable(ARG_EDIT_INTENT, it) },
+                        navOptions = null,
+                        navigatorExtras = null,
+                    )
+            },
+            onStartShareActivity = { shareActivityResult.launch(it) },
+            onShowDeleteConfirmationDialog = { viewModel ->
+                val context = context ?: return@bind
+                AlertDialog.Builder(context)
+                    .setMessage(R.string.delete_wallpaper_confirmation)
+                    .setOnDismissListener { viewModel.onDismiss.invoke() }
+                    .setPositiveButton(R.string.delete_live_wallpaper) { _, _ ->
+                        if (viewModel.creativeWallpaperDeleteUri != null) {
+                            appContext.contentResolver.delete(
+                                viewModel.creativeWallpaperDeleteUri,
+                                null,
+                                null
+                            )
+                        } else if (viewModel.liveWallpaperDeleteIntent != null) {
+                            appContext.startService(viewModel.liveWallpaperDeleteIntent)
+                        }
+                        activity?.finish()
+                    }
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
+            },
+        )
+    }
+
     companion object {
         const val SMALL_PREVIEW_SHARED_ELEMENT_ID = "small_preview_shared_element"
         const val FULL_PREVIEW_SHARED_ELEMENT_ID = "full_preview_shared_element"
+        const val ARG_EDIT_INTENT = "arg_edit_intent"
     }
 }

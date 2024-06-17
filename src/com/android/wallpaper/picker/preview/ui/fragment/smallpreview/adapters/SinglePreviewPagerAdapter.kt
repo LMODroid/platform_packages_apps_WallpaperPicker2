@@ -29,7 +29,14 @@ class SinglePreviewPagerAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.preview_handheld_card_view, parent, false)
+                .inflate(R.layout.small_preview_handheld_card_view, parent, false)
+
+        view.setPadding(
+            0,
+            parent.resources.getDimension(R.dimen.small_preview_preview_top_padding).toInt(),
+            0,
+            parent.resources.getDimension(R.dimen.small_preview_preview_bottom_padding).toInt(),
+        )
         return ViewHolder(view)
     }
 

@@ -17,14 +17,18 @@
 
 package com.android.wallpaper.testing
 
+import android.app.WallpaperColors
 import android.graphics.Bitmap
+import android.graphics.Point
 import android.graphics.Rect
-import com.android.wallpaper.model.wallpaper.ScreenOrientation
-import com.android.wallpaper.model.wallpaper.WallpaperModel.StaticWallpaperModel
 import com.android.wallpaper.module.logging.UserEventLogger.SetWallpaperEntryPoint
 import com.android.wallpaper.picker.customization.data.content.WallpaperClient
 import com.android.wallpaper.picker.customization.shared.model.WallpaperDestination
 import com.android.wallpaper.picker.customization.shared.model.WallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.LiveWallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.StaticWallpaperModel
+import com.android.wallpaper.picker.preview.shared.model.FullPreviewCropModel
+import java.io.InputStream
 import kotlin.math.min
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,9 +89,18 @@ class FakeWallpaperClient : WallpaperClient {
         setWallpaperEntryPoint: Int,
         destination: WallpaperDestination,
         wallpaperModel: StaticWallpaperModel,
+        inputStream: InputStream?,
         bitmap: Bitmap,
-        cropHints: Map<ScreenOrientation, Rect>,
-        onDone: () -> Unit
+        wallpaperSize: Point,
+        fullPreviewCropModels: Map<Point, FullPreviewCropModel>?,
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun setLiveWallpaper(
+        setWallpaperEntryPoint: Int,
+        destination: WallpaperDestination,
+        wallpaperModel: LiveWallpaperModel,
     ) {
         TODO("Not yet implemented")
     }
@@ -124,6 +137,17 @@ class FakeWallpaperClient : WallpaperClient {
 
     override fun areRecentsAvailable(): Boolean {
         return true
+    }
+
+    override fun getCurrentCropHints(displaySizes: List<Point>, which: Int): Map<Point, Rect>? {
+        return emptyMap()
+    }
+
+    override suspend fun getWallpaperColors(
+        bitmap: Bitmap,
+        cropHints: Map<Point, Rect>?
+    ): WallpaperColors? {
+        return null
     }
 
     companion object {

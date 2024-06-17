@@ -25,4 +25,6 @@
 
     <!-- Dimensions for small "dual" previews screen. -->
     <dimen name="small_dual_preview_edge_space">94dp</dimen>
+
+    <dimen name="set_wallpaper_dialog_foldable_preview_width">280dp</dimen>
 </resources>

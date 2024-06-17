@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"ਰੋਜ਼ਾਨਾ ਵਾਲਪੇਪਰ"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"ਹੋਮ ਅਤੇ ਲਾਕ ਸਕ੍ਰੀਨ"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"ਕੋਈ ਵਾਲਪੇਪਰ ਚੁਣੋ"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"ਕੋਈ ਵਾਲਪੇਪਰ ਬਣਾਓ"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"ਵਾਲਪੇਪਰ ਬਣਾਓ"</string>
     <string name="home_screen_message" msgid="106444102822522813">"ਹੋਮ ਸਕ੍ਰੀਨ"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"ਲਾਕ ਸਕ੍ਰੀਨ"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"ਹੋਮ ਸਕ੍ਰੀਨ ਅਤੇ ਲਾਕ ਸਕ੍ਰੀਨ"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"ਹੋਮ ਸਕ੍ਰੀਨ ਵਾਲਪੇਪਰ ਦੀ ਪੂਰਵ-ਝਲਕ"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"ਸੰਗ੍ਰਹਿ ਮੌਜੂਦ ਨਹੀਂ ਹੈ"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"ਕਿਰਪਾ ਕਰਕੇ ਸਪਲਿਟ-ਸਕ੍ਰੀਨ ਮੋਡ ਤੋਂ ਬਾਹਰ ਜਾਓ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"ਸੈੱਟ ਕਰੋ"</string>
     <string name="cancel" msgid="4970902691067201584">"ਰੱਦ ਕਰੋ"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"UI ਦੀ ਪੂਰਵ-ਝਲਕ ਲੁਕਾਓ"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"ਪੂਰਵ-ਝਲਕ ਵਿੱਚ UI ਨੂੰ ਲੁਕਾਇਆ ਗਿਆ ਹੈ। ਦਿਖਾਉਣ ਲਈ ਡਬਲ ਟੈਪ ਕਰੋ"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"ਕੀ ਤਬਦੀਲੀਆਂ ਨੂੰ ਰੀਸੈੱਟ ਕਰਨਾ ਹੈ?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"ਤੁਹਾਡੀਆਂ ਤਬਦੀਲੀਆਂ ਨੂੰ ਰੱਖਿਅਤ ਨਹੀਂ ਕੀਤਾ ਜਾਵੇਗਾ"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"ਹੋਰ ਵਾਲਪੇਪਰ"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"ਵਾਲਪੇਪਰ %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"ਵਾਲਪੇਪਰ"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"ਆਪਣੀ ਫ਼ੋਟੋ ਦਾ ਸੰਪਾਦਨ ਕਰਨ ਲਈ ਟੈਪ ਕਰੋ"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"ਆਪਣੀਆਂ ਫ਼ੋਟੋਆਂ ਦੀ ਸਥਿਤੀ, ਸਕੇਲ ਅਤੇ ਕੋਣ ਨੂੰ ਵਿਵਸਥਿਤ ਕਰੋ"</string>
 </resources>

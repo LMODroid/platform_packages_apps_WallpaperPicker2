@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.LruCache;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityManagerCompat;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -166,5 +168,13 @@ public class BitmapCachingAsset extends Asset {
             boolean offsetToStart) {
         // Honor the original Asset's preview image loading
         mOriginalAsset.loadPreviewImage(activity, imageView, placeholderColor, offsetToStart);
+    }
+
+    @Override
+    public void loadPreviewImage(Activity activity, ImageView imageView, int placeholderColor,
+            boolean offsetToStart, @Nullable Map<Point, Rect> cropHints) {
+        // Honor the original Asset's preview image loading
+        mOriginalAsset.loadPreviewImage(activity, imageView, placeholderColor, offsetToStart,
+                cropHints);
     }
 }

@@ -38,7 +38,6 @@ import com.android.wallpaper.module.Injector;
 import com.android.wallpaper.module.InjectorProvider;
 import com.android.wallpaper.module.JobSchedulerJobIds;
 import com.android.wallpaper.module.WallpaperPreferences;
-import com.android.wallpaper.util.DiskBasedLogger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -95,12 +94,6 @@ public class MissingHashCodeGeneratorJobService extends JobService {
                     // platform issue -- being extra defensive with this check due to instability
                     // and variability of underlying platform.
                     if (wallpaperDrawable == null) {
-                        DiskBasedLogger.e(
-                                TAG,
-                                "WallpaperManager#getDrawable returned null and there's no live "
-                                        + "wallpaper set",
-                                context
-                        );
                         jobFinished(jobParameters, false /* needsReschedule */);
                         return;
                     }

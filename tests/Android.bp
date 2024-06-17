@@ -17,6 +17,7 @@
 // Build rule for WallpaperPicker2 tests
 //
 package {
+    default_team: "trendy_team_customization_picker",
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
@@ -41,7 +42,6 @@ android_test {
         ":WallpaperPicker2Tests_srcs",
         "module/src/com/android/wallpaper/TestModule.kt",
     ],
-    exclude_srcs: [":WallpaperPicker2_src_prod"],
     static_libs: [
         "WallpaperPicker2TestLib",
         "WallpaperPicker2TestRunner",
@@ -58,6 +58,7 @@ android_test {
         "junit",
         "kotlinx_coroutines_test",
         "truth",
+        "flag-junit",
     ],
     libs: [
         "android.test.runner",

@@ -16,11 +16,10 @@
 package com.android.wallpaper.model;
 
 import android.app.WallpaperInfo;
+import android.graphics.Point;
 import android.graphics.Rect;
 
 import androidx.annotation.Nullable;
-
-import com.android.wallpaper.model.wallpaper.ScreenOrientation;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class LiveWallpaperMetadata extends WallpaperMetadata {
 
     @Nullable
     @Override
-    public Map<ScreenOrientation, Rect> getWallpaperCropHints() {
+    public Map<Point, Rect> getWallpaperCropHints() {
         throw new UnsupportedOperationException("Not implemented for live wallpapers");
     }
 }

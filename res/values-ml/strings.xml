@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"പ്രതിദിന വാൾപേപ്പർ"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"ഹോമും ലോക്ക് സ്‌ക്രീനും"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"ഒരു വാൾപേപ്പർ തിരഞ്ഞെടുക്കുക"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"ഒരു വാൾപേപ്പർ സൃഷ്ടിക്കുക"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"വാൾപേപ്പർ സൃഷ്‌ടിക്കുക"</string>
     <string name="home_screen_message" msgid="106444102822522813">"ഹോം സ്‌ക്രീൻ"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"ലോക്ക് സ്‌ക്രീൻ"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"ഹോമും ലോക്ക് സ്‌ക്രീനും"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"ഹോം സ്‌ക്രീൻ വാൾപേപ്പർ പ്രിവ്യൂ"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"ശേഖരം നിലവിലില്ല"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"സ്പ്ലിറ്റ് സ്ക്രീൻ മോഡിൽ നിന്ന് പുറത്ത് കടന്ന് വീണ്ടും ശ്രമിക്കുക"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"സജ്ജീകരിക്കുക"</string>
     <string name="cancel" msgid="4970902691067201584">"റദ്ദാക്കുക"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"UI പ്രിവ്യൂ മറയ്‌ക്കുക"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"UI പ്രിവ്യൂ മറച്ചു. മറച്ചത് മാറ്റാൻ ഡബിൾ ടാപ്പ് ചെയ്യൂ"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"മാറ്റങ്ങൾ റീസെറ്റ് ചെയ്യണോ?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"നിങ്ങളുടെ മാറ്റങ്ങൾ സംരക്ഷിക്കില്ല"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"കൂടുതൽ വാൾപേപ്പറുകൾ"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"വാൾപേപ്പർ %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"വാൾപേപ്പർ"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"നിങ്ങളുടെ ഫോട്ടോ എഡിറ്റ് ചെയ്യാൻ ടാപ്പ് ചെയ്യുക"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"നിങ്ങളുടെ ഫോട്ടോകളുടെ സ്ഥാനം, സ്‌കെയിൽ, ആംഗിൾ എന്നിവ ക്രമീകരിക്കുക"</string>
 </resources>

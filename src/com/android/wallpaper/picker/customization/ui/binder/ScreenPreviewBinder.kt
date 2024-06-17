@@ -134,6 +134,7 @@ object ScreenPreviewBinder {
 
         val flags = BaseFlags.get()
         val isPageTransitionsFeatureEnabled = flags.isPageTransitionsFeatureEnabled(activity)
+        val isMultiCropEnabled = flags.isMultiCropEnabled() && flags.isMultiCropPreviewUiEnabled()
 
         val showLoadingAnimation =
             flags.isPreviewLoadingAnimationEnabled(activity.applicationContext)
@@ -303,7 +304,8 @@ object ScreenPreviewBinder {
                                     activity = activity,
                                     wallpaperInfo = wallpaperInfo,
                                     surfaceCallback = wallpaperSurfaceCallback,
-                                    offsetToStart = offsetToStart,
+                                    offsetToStart =
+                                        if (isMultiCropEnabled) false else offsetToStart,
                                     onSurfaceViewsReady = surfaceViewsReady,
                                     thumbnailRequested = thumbnailRequested
                                 )
@@ -362,7 +364,7 @@ object ScreenPreviewBinder {
                     lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         var initialWallpaperUpdate = true
                         viewModel.shouldReloadWallpaper().collect { shouldReload ->
-                            viewModel.getWallpaperInfo(forceReload = false)
+                            viewModel.getWallpaperInfo(forceReload = shouldReload)
                             // Do not update screen preview on initial update,since the initial
                             // update results from starting or resuming the activity.
                             if (initialWallpaperUpdate) {
@@ -467,7 +469,7 @@ object ScreenPreviewBinder {
                                 activity = activity,
                                 wallpaperInfo = wallpaperInfo,
                                 surfaceCallback = wallpaperSurfaceCallback,
-                                offsetToStart = offsetToStart,
+                                offsetToStart = if (isMultiCropEnabled) false else offsetToStart,
                                 onSurfaceViewsReady = surfaceViewsReady,
                                 thumbnailRequested = thumbnailRequested
                             )
@@ -611,7 +613,8 @@ object ScreenPreviewBinder {
                     activity,
                     imageView,
                     ResourceUtils.getColorAttr(activity, android.R.attr.colorSecondary),
-                    /* offsetToStart= */ thumbAsset !is CurrentWallpaperAsset || offsetToStart
+                    /* offsetToStart= */ thumbAsset !is CurrentWallpaperAsset || offsetToStart,
+                    wallpaperInfo.wallpaperCropHints
                 )
             if (wallpaperInfo !is LiveWallpaperInfo) {
                 imageView.addOnLayoutChangeListener(

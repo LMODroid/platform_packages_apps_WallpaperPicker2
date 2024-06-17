@@ -18,6 +18,7 @@ package com.android.wallpaper.picker.di.modules
 
 import android.app.WallpaperManager
 import android.content.Context
+import android.content.pm.PackageManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,5 +33,11 @@ internal object AppModule {
     @Singleton
     fun provideWallpaperManager(@ApplicationContext appContext: Context): WallpaperManager {
         return WallpaperManager.getInstance(appContext)
+    }
+
+    @Provides
+    @Singleton
+    fun providePackageManager(@ApplicationContext appContext: Context): PackageManager {
+        return appContext.packageManager
     }
 }

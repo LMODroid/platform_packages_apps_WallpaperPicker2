@@ -131,4 +131,8 @@ public class ThirdPartyAppCategory extends Category {
     public boolean containsThirdParty(String packageName) {
         return mResolveInfo.activityInfo.packageName.equals(packageName);
     }
+
+    public ResolveInfo getResolveInfo() {
+        return mResolveInfo;
+    }
 }

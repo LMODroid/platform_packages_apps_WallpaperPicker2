@@ -56,8 +56,7 @@ open class ScreenPreviewViewModel(
         // TODO(b/281730113) Remove this once better solution is ready.
         return wallpaperUpdateEvents().map { thisWallpaper ->
             val otherWallpaper = wallpaperUpdateEvents(otherScreen()).first()
-            wallpaperInteractor.shouldHandleReload() ||
-                thisWallpaper?.wallpaperId == otherWallpaper?.wallpaperId
+            true
         }
     }
 

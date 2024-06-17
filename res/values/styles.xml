@@ -259,7 +259,9 @@
     </style>
 
     <!-- SetWallpaperPreviewDialog -->
-    <style name="SetWallpaperPreviewDialogTheme" parent="@android:style/Theme.DeviceDefault.Dialog.NoActionBar.MinWidth">
+    <style name="SetWallpaperPreviewDialogTheme" parent="@android:style/Theme.DeviceDefault.Dialog.NoActionBar">
+        <item name="android:windowMinWidthMajor">0dp</item>
+        <item name="android:windowMinWidthMinor">0dp</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/SetWallpaperDialog.Button</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/SetWallpaperDialog.Button.OutlinedButton</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/SetWallpaperDialog.Button.TextButton</item>
@@ -267,7 +269,7 @@
 
     <style name="SetWallpaperDialog"/>
     <style name="SetWallpaperDialog.Button">
-        <item name="android:textColor">@color/system_on_primary</item>
+        <item name="android:textColor">@color/system_on_secondary</item>
         <item name="android:background">@drawable/set_wallpaper_dialog_button</item>
     </style>
 
@@ -282,10 +284,18 @@
     </style>
 
     <style name="TextAppearance.SetWallpaperDialog.Title" parent="@android:style/TextAppearance.DeviceDefault.Large">
-        <item name="android:textColor">@color/system_on_surface</item>
+        <item name="android:textColor">@color/system_on_surface_variant</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:lineHeight">32sp</item>
         <item name="android:gravity">center</item>
         <item name="android:textAlignment">center</item>
+        <item name="android:paddingVertical">@dimen/abc_dialog_padding_top_material</item>
+        <item name="android:paddingHorizontal">?attr/dialogPreferredPadding</item>
+    </style>
+
+    <style name="TextAppearance.SetWallpaperDialog.Subtitle" parent="@android:style/TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@color/system_on_surface</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:paddingVertical">8dp</item>
     </style>
 </resources>

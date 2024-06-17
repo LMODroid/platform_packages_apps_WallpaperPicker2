@@ -114,12 +114,12 @@ class WallpaperInteractorTest {
 
             val homeWallpaperId1 = FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[1].wallpaperId
             val lockWallpaperId1 = FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[2].wallpaperId
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.HOME,
                 homeWallpaperId1
             )
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.LOCK,
                 lockWallpaperId1
@@ -131,12 +131,12 @@ class WallpaperInteractorTest {
 
             val homeWallpaperId2 = FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[2].wallpaperId
             val lockWallpaperId2 = FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[2].wallpaperId
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.HOME,
                 homeWallpaperId2
             )
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.LOCK,
                 lockWallpaperId2
@@ -183,12 +183,12 @@ class WallpaperInteractorTest {
 
             // Pause the client so we can examine the interim state.
             client.pause()
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.HOME,
                 homeWallpaperId
             )
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.LOCK,
                 lockWallpaperId

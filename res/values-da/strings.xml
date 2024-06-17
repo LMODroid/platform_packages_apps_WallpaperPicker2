@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"Daglig baggrund"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"Start- og låseskærm"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"Vælg en baggrund"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"Opret en baggrund"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"Opret baggrund"</string>
     <string name="home_screen_message" msgid="106444102822522813">"Startskærm"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"Låseskærm"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"Start- og låseskærm"</string>
@@ -45,7 +45,7 @@
     <string name="no_backup_image_wallpaper_description" msgid="8303268619408738057">"Animeret baggrundstjeneste til skiftende baggrunde"</string>
     <string name="daily_refresh_tile_title" msgid="3270456074558525091">"Daglig baggrund"</string>
     <string name="daily_refresh_tile_subtitle" msgid="3976682014885446443">"Tryk for at aktivere"</string>
-    <string name="start_rotation_dialog_body_live_wallpaper_needed" msgid="5132580257563846082">"Baggrunden skifter automatisk hver dag. Tryk på &lt;strong&gt;Angiv baggrund&lt;/strong&gt; på næste skærmbillede for at afslutte konfigurationen."</string>
+    <string name="start_rotation_dialog_body_live_wallpaper_needed" msgid="5132580257563846082">"Baggrunden skifter automatisk hver dag. Tryk på &lt;strong&gt;Angiv baggrund&lt;/strong&gt; på næste skærm for at afslutte konfigurationen."</string>
     <string name="start_rotation_dialog_wifi_only_option_message" msgid="3126269859713666225">"Download kun fremtidige baggrunde via Wi-Fi"</string>
     <string name="start_rotation_dialog_continue" msgid="276678987852274872">"Fortsæt"</string>
     <string name="start_rotation_progress_message" msgid="7872623873682262083">"Downloader den første baggrund…"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"Forhåndsvisning af startskærmens baggrund"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"Samlingen eksisterer ikke"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"Afslut opdelt skærm, og prøv igen"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"Angiv"</string>
     <string name="cancel" msgid="4970902691067201584">"Annuller"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"Skjul forhåndsvisning af brugerflade"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"Brugerfladen er skjult i forhåndsvisning. Tryk to gange for at vise den."</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"Vil du nulstille ændringerne?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"Dine ændringer gemmes ikke"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"Flere baggrunde"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"Baggrund %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"Baggrund"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"Tryk for at redigere dit billede"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"Juster dine billeders position, skalering og vinkel"</string>
 </resources>

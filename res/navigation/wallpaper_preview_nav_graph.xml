@@ -29,6 +29,13 @@
             app:destination="@id/setWallpaperDialog" />
     </fragment>
     <fragment
+        android:id="@+id/creativeNewPreviewFragment"
+        android:name="com.android.wallpaper.picker.preview.ui.fragment.CreativeNewPreviewFragment">
+        <action
+            android:id="@+id/action_creativeNewPreviewFragment_to_smallPreviewFragment"
+            app:destination="@+id/smallPreviewFragment" />
+    </fragment>
+    <fragment
         android:id="@+id/fullPreviewFragment"
         android:name="com.android.wallpaper.picker.preview.ui.fragment.FullPreviewFragment">
     </fragment>

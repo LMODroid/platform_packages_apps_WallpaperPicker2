@@ -30,13 +30,13 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"Kertas dinding harian"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"Skrin utama &amp; Skrin kunci"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"Pilih Hiasan latar"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"Buat Hiasan latar"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"Buat hiasan latar"</string>
     <string name="home_screen_message" msgid="106444102822522813">"Skrin utama"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"Kunci skrin"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"Skrin Utama &amp; Kunci"</string>
     <string name="set_wallpaper_dialog_message" msgid="2110475703996853076">"Tetapkan hiasan latar"</string>
     <string name="set_wallpaper_home_screen_destination" msgid="7315594722013109354">"Skrin utama"</string>
-    <string name="set_wallpaper_lock_screen_destination" msgid="6224685559375417945">"Kunci skrin"</string>
+    <string name="set_wallpaper_lock_screen_destination" msgid="6224685559375417945">"Skrin kunci"</string>
     <string name="set_wallpaper_both_destination" msgid="2536004558738350775">"Skrin utama dan skrin kunci"</string>
     <string name="no_backup_image_wallpaper_label" msgid="6316627676107284851">"Menggilirkan Kertas Dinding Imej"</string>
     <string name="permission_needed_explanation" msgid="139166837541426823">"Untuk memaparkan kertas dinding semasa di sini, <xliff:g id="APP_NAME">%1$s</xliff:g> memerlukan akses kepada storan peranti anda."</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"Pratonton hiasan latar skrin utama"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"Koleksi tersebut tidak wujud"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"Sila keluar daripada mod skrin pisah dan cuba lagi"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"Tetapkan"</string>
     <string name="cancel" msgid="4970902691067201584">"Batal"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"Sembunyikan Pratontotn UI"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"Sembunyi UI dlm pratonton Dwiketik utk nyahsembunyi"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"Tetapkan semula perubahan?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"Perubahan anda tidak akan disimpan"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"Lagi hiasan latar"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"Hiasan latar %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"Hiasan latar"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"Ketik untuk mengedit foto anda"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"Laraskan kedudukan, skala dan sudut foto anda"</string>
 </resources>

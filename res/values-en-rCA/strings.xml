@@ -32,7 +32,7 @@
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"Home &amp; Lock screen"</string>
     <!-- no translation found for choose_a_wallpaper_section_title (1009823506890453891) -->
     <skip />
-    <!-- no translation found for creative_wallpaper_title (8459226435723103934) -->
+    <!-- no translation found for creative_wallpaper_title (3581650238648981372) -->
     <skip />
     <string name="home_screen_message" msgid="106444102822522813">"Home screen"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"Lock screen"</string>
@@ -115,6 +115,8 @@
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"The collection doesn\'t exist"</string>
     <!-- no translation found for wallpaper_exit_split_screen (1928870664619591636) -->
     <skip />
+    <!-- no translation found for set_wallpaper_dialog_set_button (5760149969510325088) -->
+    <skip />
     <string name="cancel" msgid="4970902691067201584">"Cancel"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"Hide UI preview"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"UI is hidden in preview. Double-tap to unhide"</string>
@@ -152,6 +154,12 @@
     <skip />
     <!-- no translation found for more_wallpapers (8116268433411881705) -->
     <skip />
-    <!-- no translation found for recent_wallpaper_label (3996353584371118367) -->
+    <!-- no translation found for recents_wallpaper_label (8653165542635660222) -->
+    <skip />
+    <!-- no translation found for default_wallpaper_title (2541071182656978180) -->
+    <skip />
+    <!-- no translation found for small_preview_tooltip (1920430079013352071) -->
+    <skip />
+    <!-- no translation found for full_preview_tooltip (4648994028015322759) -->
     <skip />
 </resources>

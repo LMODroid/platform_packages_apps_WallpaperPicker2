@@ -26,6 +26,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.android.wallpaper.R
 import com.android.wallpaper.picker.customization.ui.viewmodel.WallpaperQuickSwitchOptionViewModel
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 /**
@@ -45,17 +46,36 @@ object WallpaperQuickSwitchOptionBinder {
         largeOptionWidthPx: Int,
         isThumbnailFadeAnimationEnabled: Boolean,
         position: Int,
+        titleMap: MutableMap<String, Int>,
     ) {
         val selectionBorder: View = view.requireViewById(R.id.selection_border)
         val selectionIcon: View = view.requireViewById(R.id.selection_icon)
         val thumbnailView: ImageView = view.requireViewById(R.id.thumbnail)
         val placeholder: ImageView = view.requireViewById(R.id.placeholder)
 
-        view.contentDescription =
-            viewModel.title
-                ?: view.resources.getString(R.string.recent_wallpaper_label, "$position")
-
         placeholder.setBackgroundColor(viewModel.placeholderColor)
+
+        if (viewModel.title != null) {
+            viewModel.title
+            val latestIndex = titleMap.getOrDefault(viewModel.title, 0) + 1
+
+            view.contentDescription =
+                view.resources.getString(
+                    R.string.recents_wallpaper_label,
+                    viewModel.title,
+                    latestIndex,
+                )
+            titleMap[viewModel.title] = position + 1
+        } else {
+            // if the content description is missing then the default description will be the
+            // default wallpaper title and its position
+            view.contentDescription =
+                view.resources.getString(
+                    R.string.recents_wallpaper_label,
+                    view.resources.getString(R.string.default_wallpaper_title),
+                    position + 1,
+                )
+        }
 
         lifecycleOwner.lifecycleScope.launch {
             launch {
@@ -80,6 +100,13 @@ object WallpaperQuickSwitchOptionBinder {
                         animate = !isFirstValue,
                     )
                     isFirstValue = false
+                }
+            }
+
+            launch {
+                viewModel.isSelectionIndicatorVisible.distinctUntilChanged().collect { isSelected ->
+                    // Update the content description to announce the selection status
+                    view.isSelected = isSelected
                 }
             }
 

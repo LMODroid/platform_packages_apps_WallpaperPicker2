@@ -39,17 +39,21 @@ class DisplayAspectRatioFrameLayout(
         // DisplayAspectRatioFrameLayout is allowed to stretch to fill its parent (for example if
         // the parent is a vertical LinearLayout and the DisplayAspectRatioFrameLayout has a height
         // if 0 and a weight of 1.
+        // However we make sure that the width of the children never exceeds the width of the parent
         //
         // If you need to use this class to force the height dimension based on the width instead,
         // you will need to flip the logic below.
         children.forEach { child ->
+            val childWidth =
+                (child.measuredHeight / screenAspectRatio).toInt().coerceAtMost(measuredWidth)
             child.measure(
+                MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(
-                    (child.measuredHeight / screenAspectRatio).toInt(),
-                    MeasureSpec.EXACTLY
-                ),
-                MeasureSpec.makeMeasureSpec(
-                    child.measuredHeight,
+                    if (childWidth < measuredWidth) {
+                        child.measuredHeight
+                    } else {
+                        (childWidth * screenAspectRatio).toInt()
+                    },
                     MeasureSpec.EXACTLY,
                 ),
             )

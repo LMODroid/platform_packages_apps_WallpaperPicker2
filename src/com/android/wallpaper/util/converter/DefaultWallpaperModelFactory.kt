@@ -21,8 +21,8 @@ import com.android.wallpaper.model.CreativeWallpaperInfo
 import com.android.wallpaper.model.ImageWallpaperInfo
 import com.android.wallpaper.model.LiveWallpaperInfo
 import com.android.wallpaper.model.WallpaperInfo
-import com.android.wallpaper.model.wallpaper.StaticWallpaperData
-import com.android.wallpaper.model.wallpaper.WallpaperModel
+import com.android.wallpaper.picker.data.StaticWallpaperData
+import com.android.wallpaper.picker.data.WallpaperModel
 import com.android.wallpaper.util.converter.WallpaperModelFactory.Companion.getCommonWallpaperData
 import com.android.wallpaper.util.converter.WallpaperModelFactory.Companion.getCreativeWallpaperData
 import com.android.wallpaper.util.converter.WallpaperModelFactory.Companion.getImageWallpaperData
@@ -45,7 +45,11 @@ class DefaultWallpaperModelFactory @Inject constructor() : WallpaperModelFactory
         } else {
             WallpaperModel.StaticWallpaperModel(
                 commonWallpaperData = wallpaperInfo.getCommonWallpaperData(context),
-                staticWallpaperData = StaticWallpaperData(asset = wallpaperInfo.getAsset(context)),
+                staticWallpaperData =
+                    StaticWallpaperData(
+                        asset = wallpaperInfo.getAsset(context),
+                        cropHints = wallpaperInfo.wallpaperCropHints
+                    ),
                 imageWallpaperData =
                     (wallpaperInfo as? ImageWallpaperInfo)?.getImageWallpaperData(),
                 networkWallpaperData = null,

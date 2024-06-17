@@ -16,19 +16,66 @@
 
 package com.android.wallpaper.picker.preview.domain.interactor
 
-import com.android.wallpaper.model.wallpaper.WallpaperModel
+import android.app.WallpaperColors
+import android.graphics.Bitmap
+import android.graphics.Point
+import android.graphics.Rect
+import com.android.wallpaper.module.logging.UserEventLogger
+import com.android.wallpaper.picker.customization.data.repository.WallpaperRepository
+import com.android.wallpaper.picker.customization.shared.model.WallpaperDestination
+import com.android.wallpaper.picker.data.WallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.StaticWallpaperModel
 import com.android.wallpaper.picker.preview.data.repository.WallpaperPreviewRepository
+import com.android.wallpaper.picker.preview.shared.model.FullPreviewCropModel
 import dagger.hilt.android.scopes.ActivityRetainedScoped
+import java.io.InputStream
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.StateFlow
 
 @ActivityRetainedScoped
 class WallpaperPreviewInteractor
 @Inject
 constructor(
-    wallpaperPreviewRepository: WallpaperPreviewRepository,
+    private val wallpaperPreviewRepository: WallpaperPreviewRepository,
+    private val wallpaperRepository: WallpaperRepository,
 ) {
-    val wallpaperModel: Flow<WallpaperModel> =
-        wallpaperPreviewRepository.wallpaperModel.filterNotNull()
+    val wallpaperModel: StateFlow<WallpaperModel?> = wallpaperPreviewRepository.wallpaperModel
+
+    val hasTooltipBeenShown: StateFlow<Boolean> = wallpaperPreviewRepository.hasTooltipBeenShown
+    fun dismissTooltip() = wallpaperPreviewRepository.dismissTooltip()
+
+    suspend fun setStaticWallpaper(
+        @UserEventLogger.SetWallpaperEntryPoint setWallpaperEntryPoint: Int,
+        destination: WallpaperDestination,
+        wallpaperModel: StaticWallpaperModel,
+        inputStream: InputStream?,
+        bitmap: Bitmap,
+        wallpaperSize: Point,
+        fullPreviewCropModels: Map<Point, FullPreviewCropModel>? = null,
+    ) {
+        wallpaperRepository.setStaticWallpaper(
+            setWallpaperEntryPoint,
+            destination,
+            wallpaperModel,
+            inputStream,
+            bitmap,
+            wallpaperSize,
+            fullPreviewCropModels,
+        )
+    }
+
+    suspend fun setLiveWallpaper(
+        @UserEventLogger.SetWallpaperEntryPoint setWallpaperEntryPoint: Int,
+        destination: WallpaperDestination,
+        wallpaperModel: WallpaperModel.LiveWallpaperModel,
+    ) {
+        wallpaperRepository.setLiveWallpaper(
+            setWallpaperEntryPoint,
+            destination,
+            wallpaperModel,
+        )
+    }
+
+    suspend fun getWallpaperColors(bitmap: Bitmap, cropHints: Map<Point, Rect>?): WallpaperColors? =
+        wallpaperRepository.getWallpaperColors(bitmap, cropHints)
 }

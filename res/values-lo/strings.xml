@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"ຮູບພື້ນຫຼັງປະຈຳວັນ"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"ໜ້າຫຼັກ ແລະ ໜ້າຈໍລັອກ"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"ເລືອກຮູບພື້ນຫຼັງ"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"ສ້າງຮູບພື້ນຫຼັງ"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"ສ້າງຮູບພື້ນຫຼັງ"</string>
     <string name="home_screen_message" msgid="106444102822522813">"ໜ້າຈໍຫຼັກ"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"ໜ້າຈໍລັອກ"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"ໜ້າຈໍຫຼັກ ແລະ ການລັອກ"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"ຕົວຢ່າງຮູບພື້ນຫຼັງໂຮມສະກຣີນ"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"ບໍ່ມິຄໍເລັກຊັນ"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"ກະລຸນາອອກຈາກໂໝດແບ່ງໜ້າຈໍແລ້ວລອງໃໝ່"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"ຕັ້ງ"</string>
     <string name="cancel" msgid="4970902691067201584">"ຍົກເລີກ"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"ເຊື່ອງຕົວຢ່າງສ່ວນຕິດຕໍ່ຜູ້ໃຊ້"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"ເຊື່ອງສ່ວນຕິດຕໍ່ຜູ້ໃຊ້ໃນຕົວຢ່າງແລ້ວ. ແຕະສອງເທື່ອເພື່ອເຊົາເຊື່ອງ"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"ຣີເຊັດການປ່ຽນແປງບໍ?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"ການປ່ຽນ​ແປງ​ຂອງ​ທ່ານ​ຈະບໍ່​ຖືກບັນ​ທຶກ"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"ຮູບພື້ນຫຼັງເພີ່ມເຕີມ"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"ຮູບພື້ນຫຼັງ %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"ຮູບພື້ນຫຼັງ"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"ແຕະເພື່ອແກ້ໄຂຮູບພາບຂອງທ່ານ"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"ປັບຕຳແໜ່ງ, ຂະໜາດ ແລະ ມຸມຂອງຮູບພາບຂອງທ່ານ"</string>
 </resources>

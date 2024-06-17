@@ -36,7 +36,7 @@ class DualPreviewPagerAdapter(
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val view =
             LayoutInflater.from(container.context)
-                .inflate(R.layout.preview_foldable_card_view, container, false)
+                .inflate(R.layout.small_preview_foldable_card_view, container, false)
 
         onBindViewHolder.invoke(view, position)
         container.addView(view)

@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class TestStaticWallpaperInfo extends WallpaperInfo {
     public static final int COLOR_DEFAULT = 0xff000000;
+    public static final int COLOR_2 = 0xffff0000;
     public static final Parcelable.Creator<TestStaticWallpaperInfo> CREATOR =
             new Parcelable.Creator<TestStaticWallpaperInfo>() {
                 @Override

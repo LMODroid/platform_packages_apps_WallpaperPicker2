@@ -55,7 +55,6 @@ import com.android.wallpaper.model.CategoryProvider;
 import com.android.wallpaper.model.LiveWallpaperInfo;
 import com.android.wallpaper.model.WallpaperInfo;
 import com.android.wallpaper.module.InjectorProvider;
-import com.android.wallpaper.module.logging.UserEventLogger;
 import com.android.wallpaper.util.DeepLinkUtils;
 import com.android.wallpaper.util.DisplayMetricsRetriever;
 import com.android.wallpaper.util.ResourceUtils;
@@ -469,7 +468,8 @@ public class CategorySelectorFragment extends AppbarFragment {
         Snackbar snackbar = Snackbar.make(getView(), R.string.settings_snackbar_description,
                 Snackbar.LENGTH_LONG);
         Snackbar.SnackbarLayout layout = (Snackbar.SnackbarLayout) snackbar.getView();
-        TextView textView = (TextView) layout.findViewById(R.id.snackbar_text);
+        TextView textView = (TextView) layout.findViewById(
+                com.google.android.material.R.id.snackbar_text);
         layout.setBackgroundResource(R.drawable.snackbar_background);
         TypedArray typedArray = getContext().obtainStyledAttributes(
                 new int[]{android.R.attr.textColorPrimary,
@@ -561,8 +561,6 @@ public class CategorySelectorFragment extends AppbarFragment {
 
         private void onClickListenerForCreativeCategory(int position) {
             Activity activity = getActivity();
-            final UserEventLogger eventLogger =
-                    InjectorProvider.getInjector().getUserEventLogger(activity);
             if (mCategories.get(position).supportsCustomPhotos()) {
                 getCategorySelectorFragmentHost().requestCustomPhotoPicker(
                         new MyPhotosStarter.PermissionChangedListener() {

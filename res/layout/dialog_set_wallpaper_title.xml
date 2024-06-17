@@ -39,6 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@*android:string/config_headlineFontFamily"
+        android:paddingHorizontal="@dimen/set_wallpaper_dialog_title_padding"
+        android:maxLines="2"
         android:minHeight="32dp"
         android:textColor="@color/text_color_primary"
         android:textSize="24sp"

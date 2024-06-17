@@ -132,7 +132,7 @@ public class PreviewActivity extends BasePreviewActivity implements AppbarFragme
 
             if (flags.isMultiCropPreviewUiEnabled() && flags.isMultiCropEnabled()) {
                 return WallpaperPreviewActivity.Companion.newIntent(appContext,
-                        wallpaper, /* isNewTask= */ isMultiPanel);
+                        wallpaper, isAssetIdPresent, mIsViewAsHome, /* isNewTask= */ isMultiPanel);
             }
 
             // Launch a full preview activity for devices supporting multipanel mode

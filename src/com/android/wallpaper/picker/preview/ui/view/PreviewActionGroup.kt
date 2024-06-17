@@ -72,6 +72,11 @@ class PreviewActionGroup(context: Context, attrs: AttributeSet?) : FrameLayout(c
             )
     }
 
+    fun setIsDownloading(isDownloading: Boolean) {
+        downloadButtonProgress.isVisible = isDownloading
+        downloadButtonToggle.isVisible = !isDownloading
+    }
+
     private fun getActionView(action: Action): View {
         return when (action) {
             Action.INFORMATION -> informationButton

@@ -96,7 +96,7 @@ class WallpaperRepositoryTest {
 
             // Pause the client so we can examine the interim state.
             client.pause()
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.HOME,
                 FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[1].wallpaperId,
@@ -104,7 +104,7 @@ class WallpaperRepositoryTest {
             prefs.setHomeWallpaperRecentsKey(
                 FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[1].wallpaperId
             )
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.LOCK,
                 FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[2].wallpaperId,
@@ -179,12 +179,12 @@ class WallpaperRepositoryTest {
             assertThat(selectedLockWallpaperId())
                 .isEqualTo(FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS.first().wallpaperId)
 
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.HOME,
                 FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[1].wallpaperId,
             )
-            underTest.setWallpaper(
+            underTest.setRecentWallpaper(
                 SET_WALLPAPER_ENTRY_POINT_WALLPAPER_PREVIEW,
                 WallpaperDestination.LOCK,
                 FakeWallpaperClient.INITIAL_RECENT_WALLPAPERS[2].wallpaperId,

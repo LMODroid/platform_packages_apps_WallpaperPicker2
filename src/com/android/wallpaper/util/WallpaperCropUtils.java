@@ -24,6 +24,9 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.view.Display;
 
+import com.android.wallpaper.config.BaseFlags;
+import com.android.wallpaper.module.InjectorProvider;
+
 /**
  * Static utility methods for wallpaper cropping operations.
  */
@@ -191,11 +194,14 @@ public final class WallpaperCropUtils {
     public static Rect calculateCropRect(Context context, float wallpaperZoom, Point wallpaperSize,
             Point defaultCropSurfaceSize, Point targetHostSize, int scrollX, int scrollY,
             boolean cropExtraWidth) {
+        BaseFlags flags = InjectorProvider.getInjector().getFlags();
+        boolean isMultiCropEnabled =
+                flags.isMultiCropPreviewUiEnabled() && flags.isMultiCropEnabled();
         // Calculate Rect of wallpaper in physical pixel terms (i.e., scaled to current zoom).
         int scaledWallpaperWidth = Math.round(wallpaperSize.x * wallpaperZoom);
         int scaledWallpaperHeight = Math.round(wallpaperSize.y * wallpaperZoom);
-        Rect rect = new Rect();
-        rect.set(0, 0, scaledWallpaperWidth, scaledWallpaperHeight);
+        Rect scaledWallpaperRect = new Rect();
+        scaledWallpaperRect.set(0, 0, scaledWallpaperWidth, scaledWallpaperHeight);
 
         // Crop rect should start off as the visible screen and then include extra width and height
         // if available within wallpaper at the current zoom.
@@ -209,19 +215,27 @@ public final class WallpaperCropUtils {
             // Try to increase size of screenRect to include extra width depending on the layout
             // direction.
             if (RtlUtils.isRtl(context)) {
-                cropRect.left = Math.max(cropRect.left - extraWidth, rect.left);
+                cropRect.left = Math.max(cropRect.left - extraWidth, scaledWallpaperRect.left);
             } else {
-                cropRect.right = Math.min(cropRect.right + extraWidth, rect.right);
+                cropRect.right = Math.min(cropRect.right + extraWidth, scaledWallpaperRect.right);
             }
         }
 
         // Try to increase the size of the cropRect to to include extra height.
         int availableExtraHeightTop = cropRect.top - Math.max(
-                rect.top,
+                scaledWallpaperRect.top,
                 cropRect.top - extraHeightTopAndBottom);
         int availableExtraHeightBottom = Math.min(
-                rect.bottom,
+                scaledWallpaperRect.bottom,
                 cropRect.bottom + extraHeightTopAndBottom) - cropRect.bottom;
+        if (isMultiCropEnabled) {
+            // availableExtraHeightBottom shouldn't be negative, but it could happen if wallpaper
+            // zoom < 1, in that case it should be zero. Safe guard availableExtraHeightTop as well.
+            // Looks like a bug, but we always have > 1 zoom for existing preview, so flag guard
+            // this block.
+            availableExtraHeightTop = Math.max(availableExtraHeightTop, 0);
+            availableExtraHeightBottom = Math.max(availableExtraHeightBottom, 0);
+        }
 
         int availableExtraHeightTopAndBottom =
                 Math.min(availableExtraHeightTop, availableExtraHeightBottom);

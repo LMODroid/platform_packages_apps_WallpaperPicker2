@@ -27,7 +27,7 @@
         android:background="@android:color/transparent"
         android:contentDescription="@string/preview_screen_description"/>
 
-    <include layout="@layout/wallpaper_preview_full"/>
+    <include layout="@layout/full_wallpaper_preview_card"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -56,5 +56,12 @@
             app:layout_constraintTop_toTopOf="@id/toolbar_container"
             app:layout_constraintBottom_toBottomOf="@id/toolbar_container"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ViewStub
+        android:id="@+id/tooltip_stub"
+        android:inflatedId="@+id/tooltip"
+        android:layout="@layout/tooltip_full_preview"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
 
 </FrameLayout>

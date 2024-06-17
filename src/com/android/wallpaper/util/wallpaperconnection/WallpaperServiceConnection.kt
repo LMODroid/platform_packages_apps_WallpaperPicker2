@@ -9,15 +9,15 @@ class WallpaperServiceConnection(val listener: WallpaperServiceConnectionListene
     ServiceConnection {
 
     override fun onServiceConnected(componentName: ComponentName?, service: IBinder?) {
-        listener.onWallpaperServiceConnected(IWallpaperService.Stub.asInterface(service))
+        listener.onWallpaperServiceConnected(this, IWallpaperService.Stub.asInterface(service))
     }
 
-    override fun onServiceDisconnected(componentName: ComponentName?) {
-        // TODO b/300979155(giolin): Recycle resources when onServiceDisconnected
-        // Do nothing intended
-    }
+    override fun onServiceDisconnected(componentName: ComponentName?) {}
 
     interface WallpaperServiceConnectionListener {
-        fun onWallpaperServiceConnected(wallpaperService: IWallpaperService)
+        fun onWallpaperServiceConnected(
+            serviceConnection: ServiceConnection,
+            wallpaperService: IWallpaperService,
+        )
     }
 }

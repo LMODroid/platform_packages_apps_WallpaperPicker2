@@ -99,12 +99,12 @@ class WallpaperInteractor(
     }
 
     /** Sets the wallpaper to the one with the given ID. */
-    suspend fun setWallpaper(
+    suspend fun setRecentWallpaper(
         @SetWallpaperEntryPoint setWallpaperEntryPoint: Int,
         destination: WallpaperDestination,
         wallpaperId: String,
     ) {
-        repository.setWallpaper(
+        repository.setRecentWallpaper(
             setWallpaperEntryPoint = setWallpaperEntryPoint,
             destination = destination,
             wallpaperId = wallpaperId,

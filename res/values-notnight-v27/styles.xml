@@ -50,7 +50,9 @@
     </style>
 
     <!-- SetWallpaperPreviewDialog -->
-    <style name="SetWallpaperPreviewDialogTheme" parent="@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar.MinWidth">
+    <style name="SetWallpaperPreviewDialogTheme" parent="@android:style/Theme.DeviceDefault.Light.Dialog.NoActionBar">
+        <item name="android:windowMinWidthMajor">0dp</item>
+        <item name="android:windowMinWidthMinor">0dp</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/SetWallpaperDialog.Button</item>
         <item name="android:buttonBarNegativeButtonStyle">@style/SetWallpaperDialog.Button.OutlinedButton</item>
         <item name="android:buttonBarNeutralButtonStyle">@style/SetWallpaperDialog.Button.TextButton</item>

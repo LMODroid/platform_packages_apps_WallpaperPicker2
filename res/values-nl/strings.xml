@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"Dagelijkse achtergrond"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"Start- en vergrendelscherm"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"Een achtergrond kiezen"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"Een achtergrond maken"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"Achtergrond maken"</string>
     <string name="home_screen_message" msgid="106444102822522813">"Startscherm"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"Vergrendelscherm"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"Home- en vergrendelscherm"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"Voorbeeld achtergrond startscherm"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"De collectie bestaat niet"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"Sluit de modus voor gesplitst scherm af en probeer het opnieuw"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"Instellen"</string>
     <string name="cancel" msgid="4970902691067201584">"Annuleren"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"Voorbeeld van UI verbergen"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"UI verborgen in voorbeeld. Dubbeltik om zichtbaar te maken"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"Wijzigingen resetten?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"Je wijzigingen worden niet opgeslagen"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"Meer achtergronden"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"Achtergrond %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"Achtergrond"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"Tik om je foto te bewerken"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"Pas de positie, schaal en hoek van je foto\'s aan"</string>
 </resources>

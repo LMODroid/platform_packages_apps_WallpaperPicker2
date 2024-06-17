@@ -198,9 +198,7 @@ class WallpaperQuickSwitchViewModelTest {
                 isLarge = isBeingSelected || (nothingBeingSelected && isSelected),
                 isSelectionIndicatorVisible =
                     isBeingSelected || (nothingBeingSelected && isSelected),
-                isSelectable =
-                    (!nothingBeingSelected && !isBeingSelected) ||
-                        (nothingBeingSelected && !isSelected),
+                isSelectable = nothingBeingSelected && !isSelected,
             )
         }
     }

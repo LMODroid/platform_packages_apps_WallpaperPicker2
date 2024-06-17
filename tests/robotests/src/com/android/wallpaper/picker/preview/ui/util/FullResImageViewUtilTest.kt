@@ -19,9 +19,11 @@ class FullResImageViewUtilTest {
         val wallpaperSize = Point(1080, 1920)
         assertThat(
                 FullResImageViewUtil.getScaleAndCenter(
-                    Point(screenWidth, screenHeight),
-                    wallpaperSize,
+                    viewSize = Point(screenWidth, screenHeight),
+                    rawWallpaperSize = wallpaperSize,
+                    displaySize = Point(screenWidth, screenHeight),
                     cropRect = null,
+                    isRtl = false,
                 )
             )
             .isEqualTo(
@@ -41,9 +43,11 @@ class FullResImageViewUtilTest {
         val wallpaperSize = Point(3840, 3840)
         assertThat(
                 FullResImageViewUtil.getScaleAndCenter(
-                    Point(screenWidth, screenHeight),
-                    wallpaperSize,
+                    viewSize = Point(screenWidth, screenHeight),
+                    rawWallpaperSize = wallpaperSize,
+                    displaySize = Point(screenWidth, screenHeight),
                     cropRect = null,
+                    isRtl = false,
                 )
             )
             .isEqualTo(
@@ -63,9 +67,11 @@ class FullResImageViewUtilTest {
         val wallpaperSize = Point(960, 960)
         assertThat(
                 FullResImageViewUtil.getScaleAndCenter(
-                    Point(screenWidth, screenHeight),
-                    wallpaperSize,
+                    viewSize = Point(screenWidth, screenHeight),
+                    rawWallpaperSize = wallpaperSize,
+                    displaySize = Point(screenWidth, screenHeight),
                     cropRect = null,
+                    isRtl = false,
                 )
             )
             .isEqualTo(

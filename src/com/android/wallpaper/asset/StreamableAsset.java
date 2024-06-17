@@ -106,17 +106,22 @@ public abstract class StreamableAsset extends Asset {
             }
 
             InputStream inputStream = openInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
-            closeInputStream(
-                    inputStream, "Error closing the input stream used to decode the full bitmap");
+            Bitmap bitmap = null;
+            if (inputStream != null) {
+                bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+                closeInputStream(
+                        inputStream, "Error closing the input stream used "
+                                + "to decode the full bitmap");
 
-            // Rotate output bitmap if necessary because of EXIF orientation tag.
-            int matrixRotation = getDegreesRotationForExifOrientation(exifOrientation);
-            if (matrixRotation > 0) {
-                Matrix rotateMatrix = new Matrix();
-                rotateMatrix.setRotate(matrixRotation);
-                bitmap = Bitmap.createBitmap(
-                        bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), rotateMatrix, false);
+                // Rotate output bitmap if necessary because of EXIF orientation tag.
+                int matrixRotation = getDegreesRotationForExifOrientation(exifOrientation);
+                if (matrixRotation > 0) {
+                    Matrix rotateMatrix = new Matrix();
+                    rotateMatrix.setRotate(matrixRotation);
+                    bitmap = Bitmap.createBitmap(
+                            bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
+                            rotateMatrix, false);
+                }
             }
             decodeBitmapCompleted(receiver, bitmap);
         });
@@ -128,18 +133,21 @@ public abstract class StreamableAsset extends Asset {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Config.HARDWARE;
             InputStream inputStream = openInputStream();
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream, null, options);
-            closeInputStream(inputStream,
-                    "Error closing the input stream used to decode the full bitmap");
+            Bitmap bitmap = null;
+            if (inputStream != null) {
+                bitmap = BitmapFactory.decodeStream(inputStream, null, options);
+                closeInputStream(inputStream,
+                        "Error closing the input stream used to decode the full bitmap");
 
-            // Rotate output bitmap if necessary because of EXIF orientation tag.
-            int exifOrientation = getExifOrientation();
-            int matrixRotation = getDegreesRotationForExifOrientation(exifOrientation);
-            if (matrixRotation > 0) {
-                Matrix rotateMatrix = new Matrix();
-                rotateMatrix.setRotate(matrixRotation);
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(),
-                        rotateMatrix, false);
+                // Rotate output bitmap if necessary because of EXIF orientation tag.
+                int exifOrientation = getExifOrientation();
+                int matrixRotation = getDegreesRotationForExifOrientation(exifOrientation);
+                if (matrixRotation > 0) {
+                    Matrix rotateMatrix = new Matrix();
+                    rotateMatrix.setRotate(matrixRotation);
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                            bitmap.getHeight(), rotateMatrix, false);
+                }
             }
             decodeBitmapCompleted(receiver, bitmap);
         });

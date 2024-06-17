@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"کاغذ‌دیواری روزانه"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"صفحه اصلی و صفحه قفل"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"انتخاب کاغذدیواری"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"ایجاد کاغذدیواری"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"ساخت کاغذدیواری"</string>
     <string name="home_screen_message" msgid="106444102822522813">"صفحه اصلی"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"صفحه در حالت قفل"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"صفحه اصلی و صفحه در حالت قفل"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"پیش‌نمای کاغذدیواری صفحه اصلی"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"مجموعه وجود ندارد"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"لطفاً از حالت صفحه تقسیم‌شده خارج شوید و دوباره امتحان کنید"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"تنظیم"</string>
     <string name="cancel" msgid="4970902691067201584">"لغو"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"پنهان کردن پیش‌نمای رابط کاربری"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"رابط در پیش‌دید پنهان است. دوضربه برای نمایش مجدد"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"تغییرات بازنشانی شود؟"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"تغییرات شما ذخیره نخواهد شد"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"کاغذدیواری‌های بیشتر"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"‏کاغذدیواری %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"‏%1$s،‏ %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"کاغذدیواری"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"برای ویرایش عکس ضربه بزنید"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"موقعیت، مقیاس، و زاویه عکس‌هایتان را تنظیم کنید"</string>
 </resources>

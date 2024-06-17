@@ -16,11 +16,10 @@
 package com.android.wallpaper.model;
 
 import android.app.WallpaperInfo;
+import android.graphics.Point;
 import android.graphics.Rect;
 
 import androidx.annotation.Nullable;
-
-import com.android.wallpaper.model.wallpaper.ScreenOrientation;
 
 import java.util.List;
 import java.util.Map;
@@ -33,11 +32,11 @@ public class WallpaperMetadata {
     private final List<String> mAttributions;
     private final String mActionUrl;
     private final String mCollectionId;
-    @Nullable private final Map<ScreenOrientation, Rect> mCropHints;
+    @Nullable private final Map<Point, Rect> mCropHints;
     protected final android.app.WallpaperInfo mWallpaperComponent;
 
     public WallpaperMetadata(List<String> attributions, String actionUrl, String collectionId,
-            android.app.WallpaperInfo wallpaperComponent, Map<ScreenOrientation, Rect> cropHints) {
+            android.app.WallpaperInfo wallpaperComponent, Map<Point, Rect> cropHints) {
         mAttributions = attributions;
         mActionUrl = actionUrl;
         mCollectionId = collectionId;
@@ -75,12 +74,12 @@ public class WallpaperMetadata {
     }
 
     /**
-     * Returns the crop {@link Rect} of each {@link ScreenOrientation} for this wallpaper.
+     * Returns the crop {@link Rect} of each display size for this wallpaper.
      *
      * <p>Live wallpaper metadata should return null.
      */
     @Nullable
-    public Map<ScreenOrientation, Rect> getWallpaperCropHints() {
+    public Map<Point, Rect> getWallpaperCropHints() {
         return mCropHints;
     }
 }

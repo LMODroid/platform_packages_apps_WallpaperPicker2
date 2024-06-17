@@ -18,6 +18,7 @@ package com.android.wallpaper.module;
 import android.app.WallpaperManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Point;
 
 import androidx.annotation.Nullable;
 
@@ -26,6 +27,11 @@ import com.android.wallpaper.model.CurrentWallpaperInfo;
 import com.android.wallpaper.model.LiveWallpaperMetadata;
 import com.android.wallpaper.model.WallpaperInfo;
 import com.android.wallpaper.module.WallpaperPreferences.PresentationMode;
+import com.android.wallpaper.picker.customization.data.content.WallpaperClient;
+import com.android.wallpaper.util.DisplayUtils;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Default implementation of {@link CurrentWallpaperInfoFactory} which actually constructs
@@ -52,10 +58,49 @@ public class DefaultCurrentWallpaperInfoFactory implements CurrentWallpaperInfoF
     @Override
     public synchronized void createCurrentWallpaperInfos(Context context, boolean forceRefresh,
             WallpaperInfoCallback callback) {
+
+        BaseFlags flags = InjectorProvider.getInjector().getFlags();
+        final boolean isMultiCropEnabled =
+                flags.isMultiCropEnabled() && flags.isMultiCropPreviewUiEnabled();
+
         boolean isHomeWallpaperSynced  = homeWallpaperSynced(context);
         boolean isLockWallpaperSynced  = lockWallpaperSynced(context);
         if (!forceRefresh && isHomeWallpaperSynced && isLockWallpaperSynced
                 && mPresentationMode != WallpaperPreferences.PRESENTATION_MODE_ROTATING) {
+            // Update wallpaper crop hints for static wallpaper even if home & lock wallpaper are
+            // considered synced because wallpaper info are considered synced as long as both are
+            // static
+            if (isMultiCropEnabled) {
+                DisplayUtils displayUtils = InjectorProvider.getInjector().getDisplayUtils(context);
+                WallpaperClient wallpaperClient = InjectorProvider.getInjector().getWallpaperClient(
+                        context);
+                List<Point> displaySizes = displayUtils.getInternalDisplaySizes();
+                if (mHomeWallpaper != null) {
+                    boolean isHomeWallpaperStatic = mHomeWallpaper.getWallpaperComponent() == null
+                            || mHomeWallpaper.getWallpaperComponent().getComponent() == null;
+                    if (isHomeWallpaperStatic) {
+                        mHomeWallpaper.setWallpaperCropHints(
+                                wallpaperClient.getCurrentCropHints(displaySizes,
+                                        WallpaperManager.FLAG_SYSTEM));
+                    } else {
+                        mHomeWallpaper.setWallpaperCropHints(new HashMap<>());
+                    }
+                }
+                if (mLockWallpaper != null) {
+                    boolean isLockWallpaperStatic = mLockWallpaper.getWallpaperComponent() == null
+                            || mLockWallpaper.getWallpaperComponent().getComponent() == null;
+                    if (isLockWallpaperStatic) {
+                        mLockWallpaper.setWallpaperCropHints(
+                                wallpaperClient.getCurrentCropHints(displaySizes,
+                                        WallpaperManager.FLAG_LOCK));
+                    } else {
+                        mLockWallpaper.setWallpaperCropHints(new HashMap<>());
+                    }
+                }
+            } else {
+                if (mHomeWallpaper != null) mHomeWallpaper.setWallpaperCropHints(null);
+                if (mLockWallpaper != null) mLockWallpaper.setWallpaperCropHints(null);
+            }
             callback.onWallpaperInfoCreated(mHomeWallpaper, mLockWallpaper, mPresentationMode);
             return;
         }
@@ -69,9 +114,6 @@ public class DefaultCurrentWallpaperInfoFactory implements CurrentWallpaperInfoF
 
         mWallpaperRefresher.refresh(
                 (homeWallpaperMetadata, lockWallpaperMetadata, presentationMode) -> {
-                    BaseFlags flags = InjectorProvider.getInjector().getFlags();
-                    final boolean multiCropEnabled =
-                            flags.isMultiCropEnabled() && flags.isMultiCropPreviewUiEnabled();
                     WallpaperInfo homeWallpaper;
                     if (homeWallpaperMetadata instanceof LiveWallpaperMetadata) {
                         homeWallpaper = mLiveWallpaperInfoFactory.getLiveWallpaperInfo(
@@ -82,7 +124,7 @@ public class DefaultCurrentWallpaperInfoFactory implements CurrentWallpaperInfoF
                                 homeWallpaperMetadata.getActionUrl(),
                                 homeWallpaperMetadata.getCollectionId(),
                                 WallpaperManager.FLAG_SYSTEM);
-                        if (multiCropEnabled) {
+                        if (isMultiCropEnabled) {
                             homeWallpaper.setWallpaperCropHints(
                                     homeWallpaperMetadata.getWallpaperCropHints());
                         }
@@ -102,7 +144,7 @@ public class DefaultCurrentWallpaperInfoFactory implements CurrentWallpaperInfoF
                                     lockWallpaperMetadata.getCollectionId(),
                                     WallpaperManager.FLAG_LOCK);
 
-                            if (multiCropEnabled) {
+                            if (isMultiCropEnabled) {
                                 lockWallpaper.setWallpaperCropHints(
                                         lockWallpaperMetadata.getWallpaperCropHints());
                             }

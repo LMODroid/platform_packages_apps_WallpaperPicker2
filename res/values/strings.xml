@@ -61,7 +61,7 @@
     <string name="choose_a_wallpaper_section_title">Choose a Wallpaper</string>
 
     <!-- Label indicating the title for Creative Wallpapers block in the WallpaperPicker screen [CHAR LIMIT=100] -->
-    <string name="creative_wallpaper_title">Create a Wallpaper</string>
+    <string name="creative_wallpaper_title">Create wallpaper</string>
 
     <!-- Label referring to the home screen of the device, i.e. shown behind the launcher.
          [CHAR LIMIT=30] -->
@@ -378,6 +378,9 @@
     <!-- Error message advising user to exit our of split screen in order to see preview. [CHAR_LIMIT=NONE] -->
     <string name="wallpaper_exit_split_screen">Please exit split screen mode and try again</string>
 
+    <!-- Label for set wallpaper dialog positive button to set new wallpaper. [CHAR LIMIT=30] -->
+    <string name="set_wallpaper_dialog_set_button">Set</string>
+
     <!-- Label for a cancel button of a dialog. [CHAR LIMIT=30] -->
     <string name="cancel">Cancel</string>
 
@@ -502,6 +505,29 @@
 
     [CHAR LIMIT=128].
     -->
-    <string name="recent_wallpaper_label">Wallpaper %1$s</string>
+    <string name="recents_wallpaper_label">%1$s, %2$d</string>
+
+    <!--
+     Default wallpaper title for wallpapers which do not have an inherent title
+
+    [CHAR LIMIT=128].
+    -->
+    <string name="default_wallpaper_title">Wallpaper</string>
+
+    <!--
+     Tooltip label that appears over the small wallpaper preview, where a user can tap to enter the
+     full screen preview to adjust the wallpaper crop
+
+    [CHAR LIMIT=128].
+    -->
+    <string name="small_preview_tooltip">Tap to edit your photo</string>
+
+    <!--
+     Tooltip label that appears over the full wallpaper preview, where a user can adjust the
+     wallpaper crop
+
+    [CHAR LIMIT=128].
+    -->
+    <string name="full_preview_tooltip">Adjust the position, scale, and angle of your photos</string>
 
 </resources>

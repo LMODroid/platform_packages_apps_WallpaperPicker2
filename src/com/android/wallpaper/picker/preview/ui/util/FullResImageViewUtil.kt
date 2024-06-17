@@ -18,6 +18,7 @@ package com.android.wallpaper.picker.preview.ui.util
 import android.graphics.Point
 import android.graphics.PointF
 import android.graphics.Rect
+import com.android.wallpaper.picker.preview.ui.util.CropSizeUtil.fitCropRectToLayoutDirection
 import com.android.wallpaper.util.WallpaperCropUtils
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 
@@ -28,13 +29,17 @@ object FullResImageViewUtil {
     fun getScaleAndCenter(
         viewSize: Point,
         rawWallpaperSize: Point,
+        displaySize: Point,
         cropRect: Rect?,
+        isRtl: Boolean,
     ): ScaleAndCenter {
         // Determine minimum zoom to fit maximum visible area of wallpaper on crop surface.
         // defaultRawWallpaperRect represents a brand new wallpaper preview with no crop hints.
         val defaultRawWallpaperRect =
             WallpaperCropUtils.calculateVisibleRect(rawWallpaperSize, viewSize)
-        val visibleRawWallpaperRect = cropRect ?: defaultRawWallpaperRect
+        val visibleRawWallpaperRect =
+            cropRect?.let { fitCropRectToLayoutDirection(it, displaySize, isRtl) }
+                ?: defaultRawWallpaperRect
         val centerPosition =
             PointF(
                 visibleRawWallpaperRect.centerX().toFloat(),

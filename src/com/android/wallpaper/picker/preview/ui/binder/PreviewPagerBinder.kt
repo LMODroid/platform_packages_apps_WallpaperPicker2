@@ -20,10 +20,10 @@ import android.content.Context
 import android.graphics.Point
 import android.view.View
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.android.wallpaper.R
 import com.android.wallpaper.model.wallpaper.PreviewPagerPage
-import com.android.wallpaper.model.wallpaper.getScreenOrientation
 import com.android.wallpaper.picker.preview.ui.fragment.smallpreview.adapters.SinglePreviewPagerAdapter
 import com.android.wallpaper.picker.preview.ui.fragment.smallpreview.pagetransformers.PreviewCardPageTransformer
 import com.android.wallpaper.picker.preview.ui.viewmodel.WallpaperPreviewViewModel
@@ -40,19 +40,28 @@ object PreviewPagerBinder {
         previewsViewPager: ViewPager2,
         wallpaperPreviewViewModel: WallpaperPreviewViewModel,
         previewDisplaySize: Point,
+        currentNavDestId: Int,
         navigate: (View) -> Unit,
     ) {
         previewsViewPager.apply {
             adapter = SinglePreviewPagerAdapter { viewHolder, position ->
+                PreviewTooltipBinder.bind(
+                    tooltipStub = viewHolder.itemView.requireViewById(R.id.tooltip_stub),
+                    enableClickToDismiss = false,
+                    viewModel = wallpaperPreviewViewModel,
+                    lifecycleOwner = viewLifecycleOwner,
+                )
+
                 SmallPreviewBinder.bind(
                     applicationContext = applicationContext,
                     view = viewHolder.itemView.requireViewById(R.id.preview),
                     viewModel = wallpaperPreviewViewModel,
                     screen = PreviewPagerPage.entries[position].screen,
-                    orientation = getScreenOrientation(previewDisplaySize),
+                    displaySize = previewDisplaySize,
                     foldableDisplay = null,
                     mainScope = mainScope,
                     viewLifecycleOwner = viewLifecycleOwner,
+                    currentNavDestId = currentNavDestId,
                     navigate = navigate,
                 )
             }
@@ -60,6 +69,13 @@ object PreviewPagerBinder {
             clipChildren = false
             clipToPadding = false
             setPageTransformer(PreviewCardPageTransformer(previewDisplaySize))
+        }
+
+        // the over scroll animation needs to be disabled for the RecyclerView that is contained in
+        // the ViewPager2 rather than the ViewPager2 itself
+        val child: View = previewsViewPager.getChildAt(0)
+        if (child is RecyclerView) {
+            child.overScrollMode = View.OVER_SCROLL_NEVER
         }
     }
 }

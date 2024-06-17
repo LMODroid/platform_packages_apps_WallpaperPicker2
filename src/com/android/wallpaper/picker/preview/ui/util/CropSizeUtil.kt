@@ -66,4 +66,13 @@ object CropSizeUtil {
 
         return PointF(x * ratio, y * ratio)
     }
+
+    fun fitCropRectToLayoutDirection(
+        cropRect: Rect,
+        displaySize: Point,
+        isRtl: Boolean,
+    ): Rect {
+        val parallax = cropRect.width() - displaySize.x * cropRect.height() / displaySize.y
+        return Rect(cropRect).apply { if (isRtl) left += parallax else right -= parallax }
+    }
 }

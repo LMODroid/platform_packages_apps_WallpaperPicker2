@@ -36,6 +36,7 @@ object DualPreviewSelectorBinder {
         applicationContext: Context,
         viewLifecycleOwner: LifecycleOwner,
         mainScope: CoroutineScope,
+        currentNavDestId: Int,
         navigate: (View) -> Unit,
     ) {
         // set up tabs view pager
@@ -50,6 +51,7 @@ object DualPreviewSelectorBinder {
             applicationContext,
             viewLifecycleOwner,
             mainScope,
+            currentNavDestId,
             navigate,
         )
     }

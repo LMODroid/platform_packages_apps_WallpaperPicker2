@@ -16,6 +16,7 @@
 package com.android.wallpaper.picker.preview.ui.binder
 
 import android.content.Intent
+import android.graphics.Point
 import android.net.Uri
 import android.view.View
 import androidx.lifecycle.Lifecycle
@@ -32,7 +33,9 @@ import com.android.wallpaper.picker.preview.ui.viewmodel.Action.EDIT
 import com.android.wallpaper.picker.preview.ui.viewmodel.Action.EFFECTS
 import com.android.wallpaper.picker.preview.ui.viewmodel.Action.INFORMATION
 import com.android.wallpaper.picker.preview.ui.viewmodel.Action.SHARE
+import com.android.wallpaper.picker.preview.ui.viewmodel.DeleteConfirmationDialogViewModel
 import com.android.wallpaper.picker.preview.ui.viewmodel.PreviewActionsViewModel
+import com.android.wallpaper.picker.preview.ui.viewmodel.WallpaperPreviewViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import kotlinx.coroutines.launch
@@ -42,15 +45,20 @@ object PreviewActionsBinder {
     fun bind(
         actionGroup: PreviewActionGroup,
         floatingSheet: PreviewActionFloatingSheet,
-        viewModel: PreviewActionsViewModel,
+        previewViewModel: WallpaperPreviewViewModel,
+        actionsViewModel: PreviewActionsViewModel,
+        displaySize: Point,
         lifecycleOwner: LifecycleOwner,
         logger: UserEventLogger,
+        onStartEditActivity: (intent: Intent) -> Unit,
+        onStartShareActivity: (intent: Intent) -> Unit,
+        onShowDeleteConfirmationDialog: (videModel: DeleteConfirmationDialogViewModel) -> Unit,
     ) {
         val floatingSheetCallback =
             object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(view: View, newState: Int) {
                     if (newState == STATE_HIDDEN) {
-                        viewModel.onDialogCollapsed()
+                        actionsViewModel.onFloatingSheetCollapsed()
                     }
                 }
 
@@ -66,94 +74,27 @@ object PreviewActionsBinder {
 
         lifecycleOwner.lifecycleScope.launch {
             lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                /** [INFORMATION] */
                 launch {
-                    viewModel.isInformationChecked.collect {
-                        actionGroup.setIsChecked(INFORMATION, it)
-                    }
-                }
-
-                launch {
-                    viewModel.isInformationVisible.collect {
+                    actionsViewModel.isInformationVisible.collect {
                         actionGroup.setIsVisible(INFORMATION, it)
                     }
                 }
 
                 launch {
-                    viewModel.onInformationClicked.collect {
+                    actionsViewModel.isInformationChecked.collect {
+                        actionGroup.setIsChecked(INFORMATION, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.onInformationClicked.collect {
                         actionGroup.setClickListener(INFORMATION, it)
                     }
                 }
 
                 launch {
-                    viewModel.isDownloadChecked.collect { actionGroup.setIsChecked(DOWNLOAD, it) }
-                }
-
-                launch {
-                    viewModel.isDownloadVisible.collect { actionGroup.setIsVisible(DOWNLOAD, it) }
-                }
-
-                launch {
-                    viewModel.onDownloadClicked.collect {
-                        actionGroup.setClickListener(DOWNLOAD, it)
-                    }
-                }
-
-                launch {
-                    viewModel.isDeleteChecked.collect { actionGroup.setIsChecked(DELETE, it) }
-                }
-
-                launch {
-                    viewModel.isDeleteVisible.collect { actionGroup.setIsVisible(DELETE, it) }
-                }
-
-                launch {
-                    viewModel.onDeleteClicked.collect { actionGroup.setClickListener(DELETE, it) }
-                }
-
-                launch { viewModel.isEditChecked.collect { actionGroup.setIsChecked(EDIT, it) } }
-
-                launch { viewModel.isEditVisible.collect { actionGroup.setIsVisible(EDIT, it) } }
-
-                launch {
-                    viewModel.onEditClicked.collect { actionGroup.setClickListener(EDIT, it) }
-                }
-
-                launch {
-                    viewModel.isCustomizeChecked.collect { actionGroup.setIsChecked(CUSTOMIZE, it) }
-                }
-
-                launch {
-                    viewModel.isCustomizeVisible.collect { actionGroup.setIsVisible(CUSTOMIZE, it) }
-                }
-
-                launch {
-                    viewModel.onCustomizeClicked.collect {
-                        actionGroup.setClickListener(CUSTOMIZE, it)
-                    }
-                }
-
-                launch {
-                    viewModel.isEffectsChecked.collect { actionGroup.setIsChecked(EFFECTS, it) }
-                }
-
-                launch {
-                    viewModel.isEffectsVisible.collect { actionGroup.setIsVisible(EFFECTS, it) }
-                }
-
-                launch {
-                    viewModel.onEffectsClicked.collect { actionGroup.setClickListener(EFFECTS, it) }
-                }
-
-                launch { viewModel.isShareChecked.collect { actionGroup.setIsChecked(SHARE, it) } }
-
-                launch { viewModel.isShareVisible.collect { actionGroup.setIsVisible(SHARE, it) } }
-
-                launch {
-                    viewModel.onShareClicked.collect { actionGroup.setClickListener(SHARE, it) }
-                }
-
-                launch {
-                    viewModel.informationFloatingSheetViewModel.collect { viewModel ->
+                    actionsViewModel.informationFloatingSheetViewModel.collect { viewModel ->
                         if (viewModel == null) {
                             floatingSheet.collapse()
                         } else {
@@ -173,6 +114,162 @@ object PreviewActionsBinder {
                             )
                             floatingSheet.expand()
                         }
+                    }
+                }
+
+                /** [DOWNLOAD] */
+                launch {
+                    actionsViewModel.isDownloadVisible.collect {
+                        actionGroup.setIsVisible(DOWNLOAD, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.isDownloading.collect { actionGroup.setIsDownloading(it) }
+                }
+
+                launch {
+                    actionsViewModel.isDownloadButtonEnabled.collect {
+                        actionGroup.setClickListener(
+                            DOWNLOAD,
+                            if (it) {
+                                {
+                                    lifecycleOwner.lifecycleScope.launch {
+                                        actionsViewModel.downloadWallpaper()
+                                    }
+                                }
+                            } else null,
+                        )
+                    }
+                }
+
+                /** [DELETE] */
+                launch {
+                    actionsViewModel.isDeleteVisible.collect {
+                        actionGroup.setIsVisible(DELETE, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.isDeleteChecked.collect {
+                        actionGroup.setIsChecked(DELETE, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.onDeleteClicked.collect {
+                        actionGroup.setClickListener(DELETE, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.deleteConfirmationDialogViewModel.collect { viewModel ->
+                        if (viewModel != null) {
+                            onShowDeleteConfirmationDialog.invoke(viewModel)
+                        }
+                    }
+                }
+
+                /** [EDIT] */
+                launch {
+                    actionsViewModel.isEditVisible.collect { actionGroup.setIsVisible(EDIT, it) }
+                }
+
+                launch {
+                    actionsViewModel.isEditChecked.collect { actionGroup.setIsChecked(EDIT, it) }
+                }
+
+                launch {
+                    actionsViewModel.editIntent.collect {
+                        actionGroup.setClickListener(
+                            EDIT,
+                            if (it != null) {
+                                {
+                                    // We need to set default wallpaper preview config view model
+                                    // before entering full screen with edit activity overlay.
+                                    previewViewModel.setDefaultWallpaperPreviewConfigViewModel(
+                                        displaySize
+                                    )
+                                    onStartEditActivity.invoke(it)
+                                }
+                            } else null
+                        )
+                    }
+                }
+
+                /** [CUSTOMIZE] */
+                launch {
+                    actionsViewModel.isCustomizeVisible.collect {
+                        actionGroup.setIsVisible(CUSTOMIZE, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.isCustomizeChecked.collect {
+                        actionGroup.setIsChecked(CUSTOMIZE, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.onCustomizeClicked.collect {
+                        actionGroup.setClickListener(CUSTOMIZE, it)
+                    }
+                }
+
+                /** [EFFECTS] */
+                launch {
+                    actionsViewModel.isEffectsVisible.collect {
+                        actionGroup.setIsVisible(EFFECTS, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.isEffectsChecked.collect {
+                        actionGroup.setIsChecked(EFFECTS, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.onEffectsClicked.collect {
+                        actionGroup.setClickListener(EFFECTS, it)
+                    }
+                }
+
+                launch {
+                    actionsViewModel.effectFloatingSheetViewModel.collect { viewModel ->
+                        if (viewModel == null) {
+                            floatingSheet.collapse()
+                        } else {
+                            floatingSheet.setEffectContent(
+                                viewModel.effectType,
+                                viewModel.myPhotosClickListener,
+                                viewModel.collapseFloatingSheetListener,
+                                viewModel.effectSwitchListener,
+                                viewModel.effectDownloadClickListener,
+                                viewModel.status,
+                                viewModel.resultCode,
+                                viewModel.errorMessage,
+                                viewModel.title,
+                                viewModel.effectTextRes,
+                            )
+                            floatingSheet.expand()
+                        }
+                    }
+                }
+
+                /** [SHARE] */
+                launch {
+                    actionsViewModel.isShareVisible.collect { actionGroup.setIsVisible(SHARE, it) }
+                }
+
+                launch {
+                    actionsViewModel.shareIntent.collect {
+                        actionGroup.setClickListener(
+                            SHARE,
+                            if (it != null) {
+                                { onStartShareActivity.invoke(it) }
+                            } else null
+                        )
                     }
                 }
             }

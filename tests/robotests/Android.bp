@@ -1,4 +1,5 @@
 package {
+    default_team: "trendy_team_customization_picker",
     default_applicable_licenses: ["Android-Apache-2.0"],
 }
 
@@ -7,6 +8,7 @@ android_app {
     defaults: ["WallpaperPicker2_defaults"],
     platform_apis: true,
     static_libs: [
+        "WallpaperPicker2ApplicationLib",
         "WallpaperPicker2TestLib",
     ],
 }

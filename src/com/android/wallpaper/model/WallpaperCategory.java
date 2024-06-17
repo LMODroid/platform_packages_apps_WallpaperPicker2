@@ -78,6 +78,17 @@ public class WallpaperCategory extends Category {
         // No op
     }
 
+    public List<WallpaperInfo> getWallpapers() {
+        return mWallpapers;
+    }
+
+    public Asset getThumbAsset() {
+        return mThumbAsset;
+    }
+
+    public int getFeaturedThumbnailIndex() {
+        return mFeaturedThumbnailIndex;
+    }
     @Override
     public boolean isEnumerable() {
         return true;

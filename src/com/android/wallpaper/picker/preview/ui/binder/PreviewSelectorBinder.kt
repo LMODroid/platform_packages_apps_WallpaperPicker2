@@ -35,6 +35,7 @@ object PreviewSelectorBinder {
         applicationContext: Context,
         viewLifecycleOwner: LifecycleOwner,
         mainScope: CoroutineScope,
+        currentNavDestId: Int,
         navigate: (View) -> Unit,
     ) {
         // set up tabs view pager
@@ -48,6 +49,7 @@ object PreviewSelectorBinder {
             previewsViewPager,
             wallpaperPreviewViewModel,
             previewDisplaySize,
+            currentNavDestId,
             navigate,
         )
 

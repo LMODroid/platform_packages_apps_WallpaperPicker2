@@ -37,7 +37,7 @@
                 android:top="@dimen/set_wallpaper_button_vertical_padding"
                 android:right="@dimen/set_wallpaper_button_horizontal_padding"
                 android:bottom="@dimen/set_wallpaper_button_vertical_padding" />
-            <solid  android:color="@color/system_secondary" />
+            <solid android:color="@color/system_secondary" />
         </shape>
     </item>
 </ripple>

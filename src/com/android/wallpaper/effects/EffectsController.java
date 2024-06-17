@@ -61,7 +61,7 @@ public abstract class EffectsController {
      * @param effect the effect type we want to generate.
      * @param image  the image that will have the effect applied.
      */
-    public void generateEffect(Effect effect, Uri image) {
+    public void generateEffect(EffectEnumInterface effect, Uri image) {
     }
 
     /**
@@ -93,6 +93,17 @@ public abstract class EffectsController {
     public void triggerEffect(Context context) {
     }
 
+    /** Sets the {@link EffectsServiceListener} to receive updates. */
+    public void setListener(EffectsServiceListener listener) {}
+
+    /** Removes the listener set via {@link #setListener(EffectsServiceListener)}. */
+    public void removeListener() {}
+
+    /** Returns true if the effect is expected by this controller. */
+    public boolean isTargetEffect(EffectEnumInterface effect) {
+        return effect == getTargetEffect();
+    }
+
     /**
      * Interface to listen to different key moments of the connection with the Effects Service.
      */
@@ -110,6 +121,10 @@ public abstract class EffectsController {
                 int originalStatusCode, String errorMessage);
     }
 
+    public EffectEnumInterface getTargetEffect() {
+        return Effect.NONE;
+    }
+
     /**
      * Gets whether the effect triggering is successful or not.
      *
@@ -119,4 +134,27 @@ public abstract class EffectsController {
         return false;
     }
 
+    public String getEffectTitle() {
+        return "";
+    }
+
+    public String getEffectFailedTitle() {
+        return "";
+    }
+
+    public String getEffectSubTitle() {
+        return "";
+    }
+
+    public String getRetryInstruction() {
+        return "";
+    }
+
+    public String getNoEffectInstruction() {
+        return "";
+    }
+
+    public Uri getContentUri() {
+        return Uri.EMPTY;
+    }
 }

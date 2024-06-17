@@ -22,8 +22,16 @@
         android:id="@+id/preview_tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/small_preview_tab_background"
+        android:background="@drawable/small_preview_tab_background_selected"
         android:layout_gravity="center"
         android:textAppearance="@style/WallpaperPicker.Preview.TextAppearance.NoAllCaps"
         android:textColor="@color/system_on_primary" />
+
+    <TextView
+        android:id="@+id/preview_tab_text_overlay_disabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAppearance="@style/WallpaperPicker.Preview.TextAppearance.NoAllCaps"
+        android:textColor="@color/system_secondary" />
 </FrameLayout>

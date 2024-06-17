@@ -24,7 +24,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.android.wallpaper.R
 import com.android.wallpaper.model.WallpaperInfo
-import com.android.wallpaper.picker.preview.ui.viewmodel.floatingSheet.InfoFloatingSheetViewModel
 import java.util.concurrent.Executors
 
 /** A view for displaying wallpaper info. */
@@ -57,22 +56,6 @@ class WallpaperInfoView(context: Context?, attrs: AttributeSet?) : LinearLayout(
             shouldShowExploreButton,
             exploreButtonClickListener,
             shouldShowMetadata(wallpaperInfo)
-        )
-    }
-
-    fun populateWallpaperInfo(
-        infoFloatingSheetViewModel: InfoFloatingSheetViewModel,
-        actionLabel: CharSequence?,
-        shouldShowExploreButton: Boolean,
-        exploreButtonClickListener: OnClickListener?,
-    ) {
-
-        loadWallpaperInfoData(
-            infoFloatingSheetViewModel.attributions,
-            actionLabel,
-            shouldShowExploreButton,
-            exploreButtonClickListener,
-            infoFloatingSheetViewModel.showMetadata
         )
     }
 

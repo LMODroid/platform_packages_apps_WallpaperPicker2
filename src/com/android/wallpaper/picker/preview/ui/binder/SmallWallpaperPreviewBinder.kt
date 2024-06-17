@@ -15,21 +15,24 @@
  */
 package com.android.wallpaper.picker.preview.ui.binder
 
+import android.app.WallpaperColors
 import android.content.Context
+import android.graphics.Point
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.android.wallpaper.R
-import com.android.wallpaper.model.wallpaper.ScreenOrientation
-import com.android.wallpaper.model.wallpaper.WallpaperModel
 import com.android.wallpaper.module.CustomizationSections.Screen
+import com.android.wallpaper.picker.customization.shared.model.WallpaperColorsModel
+import com.android.wallpaper.picker.data.WallpaperModel
 import com.android.wallpaper.picker.di.modules.MainDispatcher
 import com.android.wallpaper.picker.preview.ui.util.SurfaceViewUtil
 import com.android.wallpaper.picker.preview.ui.util.SurfaceViewUtil.attachView
 import com.android.wallpaper.picker.preview.ui.viewmodel.WallpaperPreviewViewModel
 import com.android.wallpaper.util.wallpaperconnection.WallpaperConnectionUtils
+import com.android.wallpaper.util.wallpaperconnection.WallpaperEngineConnection.WallpaperEngineConnectionListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -48,7 +51,7 @@ object SmallWallpaperPreviewBinder {
         surface: SurfaceView,
         viewModel: WallpaperPreviewViewModel,
         screen: Screen,
-        screenOrientation: ScreenOrientation,
+        displaySize: Point,
         applicationContext: Context,
         @MainDispatcher mainScope: CoroutineScope,
         viewLifecycleOwner: LifecycleOwner,
@@ -60,14 +63,25 @@ object SmallWallpaperPreviewBinder {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                     job =
                         viewLifecycleOwner.lifecycleScope.launch {
-                            viewModel.wallpaper.collect { wallpaper ->
+                            viewModel.smallWallpaper.collect { (wallpaper, whichPreview) ->
                                 if (wallpaper is WallpaperModel.LiveWallpaperModel) {
                                     WallpaperConnectionUtils.connect(
                                         applicationContext,
                                         mainScope,
-                                        wallpaper.liveWallpaperData.systemWallpaperInfo,
+                                        wallpaper,
+                                        whichPreview,
                                         screen.toFlag(),
                                         surface,
+                                        object : WallpaperEngineConnectionListener {
+                                            override fun onWallpaperColorsChanged(
+                                                colors: WallpaperColors?,
+                                                displayId: Int
+                                            ) {
+                                                viewModel.setWallpaperConnectionColors(
+                                                    WallpaperColorsModel.Loaded(colors)
+                                                )
+                                            }
+                                        }
                                     )
                                 } else if (wallpaper is WallpaperModel.StaticWallpaperModel) {
                                     val staticPreviewView =
@@ -76,11 +90,19 @@ object SmallWallpaperPreviewBinder {
                                     surface.attachView(staticPreviewView)
                                     // Bind static wallpaper
                                     StaticWallpaperPreviewBinder.bind(
-                                        staticPreviewView.requireViewById(R.id.low_res_image),
-                                        staticPreviewView.requireViewById(R.id.full_res_image),
-                                        viewModel.staticWallpaperPreviewViewModel,
-                                        screenOrientation,
-                                        viewLifecycleOwner,
+                                        lowResImageView =
+                                            staticPreviewView.requireViewById(R.id.low_res_image),
+                                        fullResImageView =
+                                            staticPreviewView.requireViewById(R.id.full_res_image),
+                                        viewModel = viewModel.staticWallpaperPreviewViewModel,
+                                        displaySize = displaySize,
+                                        viewLifecycleOwner = viewLifecycleOwner,
+                                        shouldCalibrateWithSystemScale = true,
+                                    )
+                                    // This is to possibly shut down all live wallpaper services
+                                    // if they exist; otherwise static wallpaper can not show up.
+                                    WallpaperConnectionUtils.disconnectAllServices(
+                                        applicationContext
                                     )
                                 }
                             }
@@ -89,6 +111,10 @@ object SmallWallpaperPreviewBinder {
 
                 override fun surfaceDestroyed(holder: SurfaceHolder) {
                     job?.cancel()
+                    // Note that we disconnect wallpaper connection for live wallpapers in
+                    // WallpaperPreviewActivity's onDestroy().
+                    // This is to reduce multiple times of connecting and disconnecting live
+                    // wallpaper services, when going back and forth small and full preview.
                 }
             }
         )

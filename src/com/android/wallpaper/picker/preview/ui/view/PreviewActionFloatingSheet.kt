@@ -24,7 +24,9 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.android.wallpaper.R
+import com.android.wallpaper.effects.EffectsController.EffectEnumInterface
 import com.android.wallpaper.util.SizeCalculator
+import com.android.wallpaper.widget.floatingsheetcontent.WallpaperEffectsView2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 
@@ -46,6 +48,37 @@ class PreviewActionFloatingSheet(context: Context, attrs: AttributeSet?) :
         floatingSheetContainer = requireViewById(R.id.floating_sheet_container)
         floatingSheetBehavior = BottomSheetBehavior.from(floatingSheetContainer)
         floatingSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+    }
+
+    fun setEffectContent(
+        effect: EffectEnumInterface,
+        myPhotosClickListener: OnClickListener,
+        collapseFloatingSheetListener: OnClickListener,
+        effectSwitchListener: WallpaperEffectsView2.EffectSwitchListener,
+        effectDownloadClickListener: WallpaperEffectsView2.EffectDownloadClickListener,
+        status: WallpaperEffectsView2.Status,
+        resultCode: Int?,
+        errorMessage: String?,
+        title: String,
+        effectTextRes: WallpaperEffectsView2.EffectTextRes,
+    ) {
+        val view =
+            LayoutInflater.from(context).inflate(R.layout.wallpaper_effects_view2, this, false)
+                as WallpaperEffectsView2
+        view.setEffectResources(effectTextRes)
+        view.setMyPhotosClickListener(myPhotosClickListener)
+        view.setCollapseFloatingSheetListener(collapseFloatingSheetListener)
+        view.addEffectSwitchListener(effectSwitchListener)
+        view.setEffectDownloadClickListener(effectDownloadClickListener)
+        view.updateEffectStatus(
+            effect,
+            status,
+            resultCode,
+            errorMessage,
+        )
+        view.updateEffectTitle(title)
+        floatingSheetView.removeAllViews()
+        floatingSheetView.addView(view)
     }
 
     fun setInformationContent(

@@ -51,7 +51,7 @@ class WallpaperSnapshotRestorer(
     ) {
         val homeWallpaperId = snapshot.args[SELECTED_HOME_SCREEN_WALLPAPER_ID]
         if (!homeWallpaperId.isNullOrEmpty()) {
-            interactor.setWallpaper(
+            interactor.setRecentWallpaper(
                 setWallpaperEntryPoint = SET_WALLPAPER_ENTRY_POINT_RESET,
                 destination = WallpaperDestination.HOME,
                 wallpaperId = homeWallpaperId
@@ -60,7 +60,7 @@ class WallpaperSnapshotRestorer(
 
         val lockWallpaperId = snapshot.args[SELECTED_LOCK_SCREEN_WALLPAPER_ID]
         if (!lockWallpaperId.isNullOrEmpty()) {
-            interactor.setWallpaper(
+            interactor.setRecentWallpaper(
                 setWallpaperEntryPoint = SET_WALLPAPER_ENTRY_POINT_RESET,
                 destination = WallpaperDestination.LOCK,
                 wallpaperId = lockWallpaperId

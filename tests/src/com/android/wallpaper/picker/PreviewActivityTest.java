@@ -130,7 +130,7 @@ public class PreviewActivityTest {
 
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         mWallpaperPersister = (TestWallpaperPersister) mInjector.getWallpaperPersister(context);
-        mEventLogger = (TestUserEventLogger) mInjector.getUserEventLogger(context);
+        mEventLogger = (TestUserEventLogger) mInjector.getUserEventLogger();
         mExploreIntentChecker = (TestExploreIntentChecker)
                 mInjector.getExploreIntentChecker(context);
         mWallpaperStatusChecker = (TestWallpaperStatusChecker)

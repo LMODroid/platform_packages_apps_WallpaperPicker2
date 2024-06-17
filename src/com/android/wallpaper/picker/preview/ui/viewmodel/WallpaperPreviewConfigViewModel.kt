@@ -16,7 +16,6 @@
 package com.android.wallpaper.picker.preview.ui.viewmodel
 
 import android.graphics.Point
-import com.android.wallpaper.model.wallpaper.ScreenOrientation
 import com.android.wallpaper.module.CustomizationSections.Screen
 
 /** Configuration for a wallpaper preview. */
@@ -27,7 +26,4 @@ data class WallpaperPreviewConfigViewModel(
 
     /** The display size the preview is based on. */
     val displaySize: Point,
-
-    /** The [ScreenOrientation] the preview is based on. */
-    val screenOrientation: ScreenOrientation,
 )

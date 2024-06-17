@@ -17,13 +17,20 @@
 
 package com.android.wallpaper.picker.customization.data.repository
 
+import android.app.WallpaperColors
 import android.graphics.Bitmap
+import android.graphics.Point
+import android.graphics.Rect
 import android.util.LruCache
 import com.android.wallpaper.module.WallpaperPreferences
 import com.android.wallpaper.module.logging.UserEventLogger.SetWallpaperEntryPoint
 import com.android.wallpaper.picker.customization.data.content.WallpaperClient
 import com.android.wallpaper.picker.customization.shared.model.WallpaperDestination
 import com.android.wallpaper.picker.customization.shared.model.WallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.LiveWallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.StaticWallpaperModel
+import com.android.wallpaper.picker.preview.shared.model.FullPreviewCropModel
+import java.io.InputStream
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -113,8 +120,45 @@ class WallpaperRepository(
             }
     }
 
+    suspend fun setStaticWallpaper(
+        @SetWallpaperEntryPoint setWallpaperEntryPoint: Int,
+        destination: WallpaperDestination,
+        wallpaperModel: StaticWallpaperModel,
+        inputStream: InputStream?,
+        bitmap: Bitmap,
+        wallpaperSize: Point,
+        fullPreviewCropModels: Map<Point, FullPreviewCropModel>? = null,
+    ) {
+        // TODO(b/303317694): provide set wallpaper status as flow
+        withContext(backgroundDispatcher) {
+            client.setStaticWallpaper(
+                setWallpaperEntryPoint,
+                destination,
+                wallpaperModel,
+                inputStream,
+                bitmap,
+                wallpaperSize,
+                fullPreviewCropModels,
+            )
+        }
+    }
+
+    suspend fun setLiveWallpaper(
+        @SetWallpaperEntryPoint setWallpaperEntryPoint: Int,
+        destination: WallpaperDestination,
+        wallpaperModel: LiveWallpaperModel,
+    ) {
+        withContext(backgroundDispatcher) {
+            client.setLiveWallpaper(
+                setWallpaperEntryPoint,
+                destination,
+                wallpaperModel,
+            )
+        }
+    }
+
     /** Sets the wallpaper to the one with the given ID. */
-    suspend fun setWallpaper(
+    suspend fun setRecentWallpaper(
         @SetWallpaperEntryPoint setWallpaperEntryPoint: Int,
         destination: WallpaperDestination,
         wallpaperId: String,
@@ -132,6 +176,9 @@ class WallpaperRepository(
             }
         }
     }
+
+    suspend fun getWallpaperColors(bitmap: Bitmap, cropHints: Map<Point, Rect>?): WallpaperColors? =
+        withContext(backgroundDispatcher) { client.getWallpaperColors(bitmap, cropHints) }
 
     companion object {
         const val DEFAULT_KEY = "default_missing_key"

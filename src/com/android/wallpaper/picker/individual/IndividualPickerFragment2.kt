@@ -68,7 +68,6 @@ import com.android.wallpaper.picker.RotationStarter
 import com.android.wallpaper.picker.StartRotationDialogFragment
 import com.android.wallpaper.picker.StartRotationErrorDialogFragment
 import com.android.wallpaper.util.ActivityUtils
-import com.android.wallpaper.util.DiskBasedLogger
 import com.android.wallpaper.util.LaunchUtils
 import com.android.wallpaper.util.SizeCalculator
 import com.android.wallpaper.widget.GridPaddingDecoration
@@ -176,8 +175,6 @@ class IndividualPickerFragment2 :
                     }
 
                     if (fetchedCategory == null) {
-                        DiskBasedLogger.e(TAG, "Failed to find the category.", context)
-
                         // The absence of this category in the CategoryProvider indicates a broken
                         // state, see b/38030129. Hence, finish the activity and return.
                         getIndividualPickerFragmentHost().moveToPreviousFragment()

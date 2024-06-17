@@ -57,10 +57,14 @@ public class CurrentWallpaperAsset extends StreamableAsset {
     @SetWallpaperFlags
     private final int mWallpaperManagerFlag;
 
-    public CurrentWallpaperAsset(Context context, @SetWallpaperFlags int wallpaperManagerFlag) {
+    private final boolean mCropped;
+
+    public CurrentWallpaperAsset(Context context, @SetWallpaperFlags int wallpaperManagerFlag,
+            boolean getCropped) {
         mWallpaperManager = WallpaperManager.getInstance(context.getApplicationContext());
         mWallpaperManagerFlag = wallpaperManagerFlag;
         mWallpaperId = mWallpaperManager.getWallpaperId(mWallpaperManagerFlag);
+        mCropped = getCropped;
     }
 
     @Override
@@ -149,7 +153,7 @@ public class CurrentWallpaperAsset extends StreamableAsset {
     }
 
     ParcelFileDescriptor getWallpaperPfd() {
-        return mWallpaperManager.getWallpaperFile(mWallpaperManagerFlag);
+        return mWallpaperManager.getWallpaperFile(mWallpaperManagerFlag, mCropped);
     }
 
     /**

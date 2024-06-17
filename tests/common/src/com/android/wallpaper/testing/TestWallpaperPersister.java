@@ -17,12 +17,14 @@ package com.android.wallpaper.testing;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.graphics.Rect;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.wallpaper.asset.Asset;
-import com.android.wallpaper.model.StaticWallpaperMetadata;
+import com.android.wallpaper.model.StaticWallpaperPrefMetadata;
 import com.android.wallpaper.model.WallpaperInfo;
 import com.android.wallpaper.module.InjectorProvider;
 import com.android.wallpaper.module.WallpaperChangedNotifier;
@@ -31,6 +33,7 @@ import com.android.wallpaper.module.WallpaperPreferences;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Test double for {@link WallpaperPersister}.
@@ -43,6 +46,7 @@ public class TestWallpaperPersister implements WallpaperPersister {
     private Bitmap mCurrentHomeWallpaper;
     private Bitmap mCurrentLockWallpaper;
     private Bitmap mPendingHomeWallpaper;
+
     private Bitmap mPendingLockWallpaper;
     private List<String> mHomeAttributions;
     private String mHomeActionUrl;
@@ -53,8 +57,8 @@ public class TestWallpaperPersister implements WallpaperPersister {
     private Rect mCropRect;
     private float mScale;
     private WallpaperInfo mWallpaperInfo;
-    private StaticWallpaperMetadata mHomeStaticWallpaperMetadata;
-    private StaticWallpaperMetadata mLockStaticWallpaperMetadata;
+    private StaticWallpaperPrefMetadata mHomeStaticWallpaperPrefMetadata;
+    private StaticWallpaperPrefMetadata mLockStaticWallpaperPrefMetadata;
 
     public TestWallpaperPersister(Context appContext) {
         mAppContext = appContext;
@@ -212,13 +216,13 @@ public class TestWallpaperPersister implements WallpaperPersister {
 
     @Override
     public boolean saveStaticWallpaperToPreferences(int destination,
-            StaticWallpaperMetadata metadata) {
+            StaticWallpaperPrefMetadata metadata) {
         if (destination == DEST_HOME_SCREEN || destination == DEST_BOTH) {
-            mHomeStaticWallpaperMetadata = metadata;
+            mHomeStaticWallpaperPrefMetadata = metadata;
         }
 
         if (destination == DEST_LOCK_SCREEN || destination == DEST_BOTH) {
-            mLockStaticWallpaperMetadata = metadata;
+            mLockStaticWallpaperPrefMetadata = metadata;
         }
         return true;
     }
@@ -237,6 +241,12 @@ public class TestWallpaperPersister implements WallpaperPersister {
     @Override
     public int setStreamToWallpaperManager(InputStream inputStream, Rect cropHint,
             boolean allowBackup, int whichWallpaper) {
+        return 1;
+    }
+
+    @Override
+    public int setStreamWithCropsToWallpaperManager(InputStream inputStream,
+            @NonNull Map<Point, Rect> cropHints, boolean allowBackup, int whichWallpaper) {
         return 1;
     }
 }

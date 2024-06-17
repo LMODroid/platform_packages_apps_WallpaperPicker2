@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"Günlük divar kağızları"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"Əsas səhifə &amp; Ekran kilidi"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"Divar kağızı seçin"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"Divar kağızı yaradın"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"Divar kağızı yaradın"</string>
     <string name="home_screen_message" msgid="106444102822522813">"Əsas ekran"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"Ekran kilidi"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"Əsas səhifə və Kilid"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"Əsas ekranda divar kağızı önizləməsi"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"Kolleksiya mövcud deyil"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"Bölünmüş ekran rejimindən çıxıb, yenidən cəhd edin"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"Ayarlayın"</string>
     <string name="cancel" msgid="4970902691067201584">"Ləğv edin"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"UI Önizləməsini gizlədin"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"UI önizləmədə gizlədilib. Göstərmək üçün iki dəfə toxunun"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"Dəyişikliklər sıfırlansın?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"Dəyişiklikləriniz yadda saxlanılmayacaq"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"Digər divar kağızları"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"Divar kağızı %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"Divar kağızı"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"Toxunaraq fotonu redaktə edin"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"Fotoların mövqe, miqyas və bucağını tənzimləyin"</string>
 </resources>

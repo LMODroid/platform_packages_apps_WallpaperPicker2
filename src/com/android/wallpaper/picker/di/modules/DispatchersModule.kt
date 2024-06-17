@@ -43,5 +43,9 @@ internal object DispatchersModule {
 
     @Provides
     @BackgroundDispatcher
+    fun provideBackgroundScope(): CoroutineScope = CoroutineScope(Dispatchers.IO)
+
+    @Provides
+    @BackgroundDispatcher
     fun provideBackgroundDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

@@ -30,7 +30,7 @@
     <string name="rotating_wallpaper_presentation_mode_message" msgid="3361676041605733288">"रोज़ वॉलपेपर बदलने की सुविधा"</string>
     <string name="wallpaper_destination_both" msgid="1124197176741944063">"होम स्क्रीन और लॉक स्क्रीन पर"</string>
     <string name="choose_a_wallpaper_section_title" msgid="1009823506890453891">"कोई वॉलपेपर चुनें"</string>
-    <string name="creative_wallpaper_title" msgid="8459226435723103934">"कोई वॉलपेपर बनाएं"</string>
+    <string name="creative_wallpaper_title" msgid="3581650238648981372">"वॉलपेपर बनाएं"</string>
     <string name="home_screen_message" msgid="106444102822522813">"होम स्क्रीन"</string>
     <string name="lock_screen_message" msgid="1534506081955058013">"लॉक स्‍क्रीन"</string>
     <string name="home_and_lock_short_label" msgid="2937922943541927983">"होम स्क्रीन और लॉक स्क्रीन पर"</string>
@@ -104,6 +104,7 @@
     <string name="home_wallpaper_preview_card_content_description" msgid="4059418716070821630">"होम स्क्रीन पर दिखने वाले वॉलपेपर की झलक"</string>
     <string name="collection_not_exist_msg" msgid="3504852962885064842">"वॉलपेपर का संग्रह मौजूद नहीं है"</string>
     <string name="wallpaper_exit_split_screen" msgid="1928870664619591636">"दो-स्क्रीन मोड को बंद करके दोबारा कोशिश करें"</string>
+    <string name="set_wallpaper_dialog_set_button" msgid="5760149969510325088">"सेट करें"</string>
     <string name="cancel" msgid="4970902691067201584">"रद्द करें"</string>
     <string name="hide_ui_preview_text" msgid="6766076482511252295">"यूज़र इंटरफ़ेस की झलक छिपाएं"</string>
     <string name="hint_hide_ui_preview" msgid="4527603797714586070">"झलक में यूआई को छिपाया गया. इसे दिखाने के लिए दो बार टैप करें"</string>
@@ -130,5 +131,8 @@
     <string name="reset_confirmation_dialog_title" msgid="3391905685838213712">"क्या आपको बदलाव रीसेट करने हैं?"</string>
     <string name="reset_confirmation_dialog_message" msgid="888669268626289603">"आपके बदलाव सेव नहीं किए जाएंगे"</string>
     <string name="more_wallpapers" msgid="8116268433411881705">"कुछ और वॉलपेपर"</string>
-    <string name="recent_wallpaper_label" msgid="3996353584371118367">"वॉलपेपर %1$s"</string>
+    <string name="recents_wallpaper_label" msgid="8653165542635660222">"%1$s, %2$d"</string>
+    <string name="default_wallpaper_title" msgid="2541071182656978180">"वॉलपेपर"</string>
+    <string name="small_preview_tooltip" msgid="1920430079013352071">"फ़ोटो में बदलाव करने के लिए उस पर टैप करें"</string>
+    <string name="full_preview_tooltip" msgid="4648994028015322759">"फ़ोटो को अडजस्ट करें, स्केल करें, और उसे सही ऐंगल पर लाएं"</string>
 </resources>

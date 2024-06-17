@@ -23,16 +23,14 @@ package {
 android_library {
     name: "WallpaperPicker2TestLib",
 
-    defaults: ["WallpaperPicker2_common_defaults"],
     srcs: [
         "src/**/*.java",
         "src/**/*.kt",
     ],
     static_libs: [
+        "WallpaperPicker2Lib",
         "androidx.annotation_annotation",
         "kotlinx_coroutines_test",
         "truth",
     ],
-
-    platform_apis: true,
 }

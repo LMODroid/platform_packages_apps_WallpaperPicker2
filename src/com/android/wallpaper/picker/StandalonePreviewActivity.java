@@ -146,7 +146,8 @@ public class StandalonePreviewActivity extends BasePreviewActivity implements Ap
         WallpaperInfo wallpaper = new ImageWallpaperInfo(intent.getData());
         if (flags.isMultiCropPreviewUiEnabled() && flags.isMultiCropEnabled()) {
             startActivity(WallpaperPreviewActivity.Companion.newIntent(
-                    this.getApplicationContext(), wallpaper, /* isNewTask= */ false));
+                    this.getApplicationContext(), wallpaper, /* isAssetIdPresent= */ false,
+                    /* isViewAsHome= */ true, /* isNewTask= */ false));
             finish();
             return;
         }

@@ -128,14 +128,10 @@ constructor(
                                     isSelectedFlow,
                                     isBecomingSelectedFlow,
                                     isSomethingBecomingSelectedFlow,
-                                ) { isSelected, isBeingSelected, isSomethingBecomingSelected,
-                                    ->
-                                    // An option is selectable if it is not itself becoming
-                                    // selected following user click or if nothing else is
-                                    // becoming selected but this option is not the selected
-                                    // one.
-                                    (isSomethingBecomingSelected && !isBeingSelected) ||
-                                        (!isSomethingBecomingSelected && !isSelected)
+                                ) { isSelected, _, isSomethingBecomingSelected ->
+                                    // An option is selectable if either something is not becoming
+                                    // selected and that item is itself not selected.
+                                    !isSomethingBecomingSelected && !isSelected
                                 }
                                 .distinctUntilChanged()
                                 .map { isSelectable ->
@@ -143,7 +139,7 @@ constructor(
                                         {
                                             // A selectable option can become selected.
                                             coroutineScope.launch {
-                                                interactor.setWallpaper(
+                                                interactor.setRecentWallpaper(
                                                     setWallpaperEntryPoint =
                                                         SET_WALLPAPER_ENTRY_POINT_WALLPAPER_QUICK_SWITCHER,
                                                     destination = destination,

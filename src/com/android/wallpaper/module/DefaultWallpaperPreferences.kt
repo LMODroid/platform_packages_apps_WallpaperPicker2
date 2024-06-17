@@ -23,20 +23,21 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Point
 import android.graphics.Rect
 import android.util.Log
-import androidx.core.content.edit
 import com.android.wallpaper.model.LiveWallpaperInfo
-import com.android.wallpaper.model.StaticWallpaperMetadata
+import com.android.wallpaper.model.LiveWallpaperPrefMetadata
+import com.android.wallpaper.model.StaticWallpaperPrefMetadata
 import com.android.wallpaper.model.WallpaperInfo
-import com.android.wallpaper.model.wallpaper.ScreenOrientation
-import com.android.wallpaper.model.wallpaper.WallpaperModel
 import com.android.wallpaper.module.WallpaperPreferenceKeys.NoBackupKeys
 import com.android.wallpaper.module.WallpaperPreferences.Companion.generateRecentsKey
 import com.android.wallpaper.module.WallpaperPreferences.PendingDailyWallpaperUpdateStatus
 import com.android.wallpaper.module.WallpaperPreferences.PendingWallpaperSetStatus
 import com.android.wallpaper.module.WallpaperPreferences.PresentationMode
 import com.android.wallpaper.picker.customization.shared.model.WallpaperDestination
+import com.android.wallpaper.picker.data.WallpaperModel.LiveWallpaperModel
+import com.android.wallpaper.picker.data.WallpaperModel.StaticWallpaperModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -280,14 +281,10 @@ open class DefaultWallpaperPreferences(private val context: Context) : Wallpaper
             .remove(NoBackupKeys.KEY_HOME_WALLPAPER_REMOTE_ID)
             .remove(NoBackupKeys.KEY_HOME_WALLPAPER_BASE_IMAGE_URL)
             .remove(NoBackupKeys.KEY_HOME_WALLPAPER_BACKING_FILE)
-            .remove(NoBackupKeys.KEY_CROP_HINT_PORTRAIT)
-            .remove(NoBackupKeys.KEY_CROP_HINT_LANDSCAPE)
-            .remove(NoBackupKeys.KEY_CROP_HINT_UNFOLDED_PORTRAIT)
-            .remove(NoBackupKeys.KEY_CROP_HINT_UNFOLDED_LANDSCAPE)
             .apply()
     }
 
-    override fun setHomeStaticImageWallpaperMetadata(metadata: StaticWallpaperMetadata) {
+    override fun setHomeStaticImageWallpaperMetadata(metadata: StaticWallpaperPrefMetadata) {
         val sharedEditor = sharedPrefs.edit()
         val attributions = metadata.attributions
         if (!attributions.isNullOrEmpty()) {
@@ -328,6 +325,43 @@ open class DefaultWallpaperPreferences(private val context: Context) : Wallpaper
         val noBackupEditor = noBackupPrefs.edit()
         noBackupEditor.putInt(NoBackupKeys.KEY_HOME_WALLPAPER_MANAGER_ID, metadata.managerId)
         noBackupEditor.putString(NoBackupKeys.KEY_HOME_WALLPAPER_REMOTE_ID, metadata.remoteId)
+        noBackupEditor.apply()
+    }
+
+    override fun setHomeLiveWallpaperMetadata(metadata: LiveWallpaperPrefMetadata) {
+        val sharedEditor = sharedPrefs.edit()
+        val attributions = metadata.attributions
+        if (!attributions.isNullOrEmpty()) {
+            attributions.take(3).forEachIndexed { index, attr ->
+                when (index) {
+                    0 ->
+                        sharedEditor.putString(
+                            WallpaperPreferenceKeys.KEY_HOME_WALLPAPER_ATTRIB_1,
+                            attr
+                        )
+                    1 ->
+                        sharedEditor.putString(
+                            WallpaperPreferenceKeys.KEY_HOME_WALLPAPER_ATTRIB_2,
+                            attr
+                        )
+                    2 ->
+                        sharedEditor.putString(
+                            WallpaperPreferenceKeys.KEY_HOME_WALLPAPER_ATTRIB_3,
+                            attr
+                        )
+                }
+            }
+        }
+        sharedEditor.putString(
+            WallpaperPreferenceKeys.KEY_HOME_WALLPAPER_COLLECTION_ID,
+            metadata.collectionId
+        )
+        sharedEditor.apply()
+
+        val noBackupEditor = noBackupPrefs.edit()
+        noBackupEditor.putString(NoBackupKeys.KEY_HOME_WALLPAPER_SERVICE_NAME, metadata.serviceName)
+        noBackupEditor.putString(NoBackupKeys.KEY_HOME_WALLPAPER_EFFECTS, metadata.effectName)
+        noBackupEditor.putInt(NoBackupKeys.KEY_HOME_WALLPAPER_MANAGER_ID, metadata.managerId)
         noBackupEditor.apply()
     }
 
@@ -464,14 +498,10 @@ open class DefaultWallpaperPreferences(private val context: Context) : Wallpaper
             .remove(NoBackupKeys.KEY_LOCK_WALLPAPER_MANAGER_ID)
             .remove(NoBackupKeys.KEY_LOCK_WALLPAPER_REMOTE_ID)
             .remove(NoBackupKeys.KEY_LOCK_WALLPAPER_BACKING_FILE)
-            .remove(NoBackupKeys.KEY_CROP_HINT_PORTRAIT)
-            .remove(NoBackupKeys.KEY_CROP_HINT_LANDSCAPE)
-            .remove(NoBackupKeys.KEY_CROP_HINT_UNFOLDED_PORTRAIT)
-            .remove(NoBackupKeys.KEY_CROP_HINT_UNFOLDED_LANDSCAPE)
             .apply()
     }
 
-    override fun setLockStaticImageWallpaperMetadata(metadata: StaticWallpaperMetadata) {
+    override fun setLockStaticImageWallpaperMetadata(metadata: StaticWallpaperPrefMetadata) {
         val sharedEditor = sharedPrefs.edit()
         val attributions = metadata.attributions
         if (!attributions.isNullOrEmpty()) {
@@ -512,6 +542,43 @@ open class DefaultWallpaperPreferences(private val context: Context) : Wallpaper
         val noBackupEditor = noBackupPrefs.edit()
         noBackupEditor.putInt(NoBackupKeys.KEY_LOCK_WALLPAPER_MANAGER_ID, metadata.managerId)
         noBackupEditor.putString(NoBackupKeys.KEY_LOCK_WALLPAPER_REMOTE_ID, metadata.remoteId)
+        noBackupEditor.apply()
+    }
+
+    override fun setLockLiveWallpaperMetadata(metadata: LiveWallpaperPrefMetadata) {
+        val sharedEditor = sharedPrefs.edit()
+        val attributions = metadata.attributions
+        if (!attributions.isNullOrEmpty()) {
+            attributions.take(3).forEachIndexed { index, attr ->
+                when (index) {
+                    0 ->
+                        sharedEditor.putString(
+                            WallpaperPreferenceKeys.KEY_LOCK_WALLPAPER_ATTRIB_1,
+                            attr
+                        )
+                    1 ->
+                        sharedEditor.putString(
+                            WallpaperPreferenceKeys.KEY_LOCK_WALLPAPER_ATTRIB_2,
+                            attr
+                        )
+                    2 ->
+                        sharedEditor.putString(
+                            WallpaperPreferenceKeys.KEY_LOCK_WALLPAPER_ATTRIB_3,
+                            attr
+                        )
+                }
+            }
+        }
+        sharedEditor.putString(
+            WallpaperPreferenceKeys.KEY_LOCK_WALLPAPER_COLLECTION_ID,
+            metadata.collectionId
+        )
+        sharedEditor.apply()
+
+        val noBackupEditor = noBackupPrefs.edit()
+        noBackupEditor.putString(NoBackupKeys.KEY_LOCK_WALLPAPER_SERVICE_NAME, metadata.serviceName)
+        noBackupEditor.putString(NoBackupKeys.KEY_LOCK_WALLPAPER_EFFECTS, metadata.effectName)
+        noBackupEditor.putInt(NoBackupKeys.KEY_LOCK_WALLPAPER_MANAGER_ID, metadata.managerId)
         noBackupEditor.apply()
     }
 
@@ -828,32 +895,31 @@ open class DefaultWallpaperPreferences(private val context: Context) : Wallpaper
 
     override suspend fun addStaticWallpaperToRecentWallpapers(
         destination: WallpaperDestination,
-        wallpaperModel: WallpaperModel.StaticWallpaperModel,
+        wallpaperModel: StaticWallpaperModel,
         bitmap: Bitmap,
-        cropHints: Map<ScreenOrientation, Rect?>,
+        cropHints: Map<Point, Rect>?,
     ) {}
 
-    override fun storeWallpaperCropHints(cropHints: Map<ScreenOrientation, Rect?>) {
-        noBackupPrefs.edit {
-            cropHints.forEach { (orientation, rect) ->
-                putString(getScreenOrientationPrefKey(orientation), rect?.flattenToString())
-            }
-        }
+    override suspend fun addLiveWallpaperToRecentWallpapers(
+        destination: WallpaperDestination,
+        wallpaperModel: LiveWallpaperModel
+    ) {}
+
+    override fun setHasPreviewTooltipBeenShown(hasTooltipBeenShown: Boolean) {
+        sharedPrefs
+            .edit()
+            .putBoolean(
+                WallpaperPreferenceKeys.KEY_HAS_PREVIEW_TOOLTIP_BEEN_SHOWN,
+                hasTooltipBeenShown
+            )
+            .apply()
     }
 
-    override fun getWallpaperCropHints(): Map<ScreenOrientation, Rect?> {
-        return ScreenOrientation.entries.associateWith {
-            Rect.unflattenFromString(noBackupPrefs.getString(getScreenOrientationPrefKey(it), null))
-        }
-    }
-
-    private fun getScreenOrientationPrefKey(orientation: ScreenOrientation): String {
-        return when (orientation) {
-            ScreenOrientation.PORTRAIT -> NoBackupKeys.KEY_CROP_HINT_PORTRAIT
-            ScreenOrientation.LANDSCAPE -> NoBackupKeys.KEY_CROP_HINT_LANDSCAPE
-            ScreenOrientation.UNFOLDED_LANDSCAPE -> NoBackupKeys.KEY_CROP_HINT_UNFOLDED_LANDSCAPE
-            ScreenOrientation.UNFOLDED_PORTRAIT -> NoBackupKeys.KEY_CROP_HINT_UNFOLDED_PORTRAIT
-        }
+    override fun getHasPreviewTooltipBeenShown(): Boolean {
+        return sharedPrefs.getBoolean(
+            WallpaperPreferenceKeys.KEY_HAS_PREVIEW_TOOLTIP_BEEN_SHOWN,
+            false
+        )
     }
 
     private fun setFirstLaunchDateSinceSetup(firstLaunchDate: Int) {
@@ -889,6 +955,7 @@ open class DefaultWallpaperPreferences(private val context: Context) : Wallpaper
     companion object {
         const val PREFS_NAME = "wallpaper"
         const val NO_BACKUP_PREFS_NAME = "wallpaper-nobackup"
+        const val KEY_VALUE_DIVIDER = "="
         private const val TAG = "DefaultWallpaperPreferences"
     }
 }

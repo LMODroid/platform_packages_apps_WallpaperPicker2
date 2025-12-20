@@ -72,6 +72,8 @@ abstract class BaseFlags {
 
     open fun isExtendibleThemeManager() = extendibleThemeManager()
 
+    open fun isGooglePickerUi() = false
+
     open fun isNewPickerUi() = newCustomizationPickerUi()
 
     open fun isClockReactiveVariantsEnabled() = clockReactiveVariants()

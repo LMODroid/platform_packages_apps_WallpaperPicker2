@@ -352,7 +352,7 @@ constructor(
             }
 
     private val myPhotosSectionViewModel: Flow<SectionViewModel> =
-        if (BaseFlags.get().isNewPickerUi()) {
+        if (BaseFlags.get().isGooglePickerUi()) {
             curatedPhotosInteractor.category
                 .distinctUntilChanged(PhotoMediaUtils.distinctMediaKeyChanged())
                 .map { category ->
@@ -452,7 +452,7 @@ constructor(
         ) { individualViewModels, creativeViewModel, myPhotosViewModel, standaloneCreativeViewModel
             ->
             buildList {
-                if (BaseFlags.get().isNewPickerUi()) {
+                if (BaseFlags.get().isGooglePickerUi()) {
                     add(myPhotosViewModel)
                     if (BaseFlags.get().isMagicPortraitEntryPointsEnabled()) {
                         standaloneCreativeViewModel?.let { add(it) }

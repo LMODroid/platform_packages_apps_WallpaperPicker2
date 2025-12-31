@@ -71,7 +71,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
     private var collapsedWidth = 0
     private var progress = 1f
     private var animator: ValueAnimator? = null
-    private var state: State = State.EXPANDED
+    private var state: State = State.COLLAPSED
 
     init {
         val shouldShowDesktopUi = BaseFlags.get().shouldShowDesktopUi(context)
@@ -92,7 +92,7 @@ constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
         wallpaperCarouselDesktop =
             if (shouldShowDesktopUi) requireViewById(R.id.wallpaper_carousel_desktop) else null
         backgroundLayout = requireViewById(R.id.wallpaper_picker_entry_background)
-        background = backgroundLayout.background as GradientDrawable
+        background = collapsedButton.background as GradientDrawable
         expandedContainer = requireViewById(R.id.wallpaper_picker_entry_expanded_container)
 
         defaultCornerRadius =
@@ -109,6 +109,10 @@ constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
     }
 
     fun configureForAnimation() {
+        if (!BaseFlags.get().isGooglePickerUi()) {
+            return
+        }
+
         post {
             // Make fixed width and height of the container, so it does not shrink with parent.
             expandedContainer.layoutParams =
@@ -149,6 +153,10 @@ constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
      * @param progress 1.0 means fully expanded and 0.0 means fully collapsed
      */
     private fun setProgress(progress: Float) {
+        if (!BaseFlags.get().isGooglePickerUi()) {
+            return
+        }
+
         this.progress = progress
         collapsedButton.alpha = 1 - progress
         collapsedButton.isInvisible = progress == 1f
@@ -176,6 +184,10 @@ constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
     }
 
     fun animateToExpanded() {
+        if (!BaseFlags.get().isGooglePickerUi()) {
+            return
+        }
+
         if (wallpaperCarousel?.adapter?.itemCount == 0) return
 
         if (state == State.EXPANDED || state == State.EXPANDING) {
@@ -211,6 +223,10 @@ constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
     }
 
     fun animateToCollapsed() {
+        if (!BaseFlags.get().isGooglePickerUi()) {
+            return
+        }
+
         if (state == State.COLLAPSED || state == State.COLLAPSING) {
             return
         }

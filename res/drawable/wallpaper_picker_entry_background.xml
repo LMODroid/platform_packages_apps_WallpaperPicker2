@@ -18,8 +18,8 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <solid android:color="@color/color_surface"/>
     <corners
-        android:topLeftRadius="@dimen/wallpaper_picker_entry_background_top_corner_radius"
-        android:topRightRadius="@dimen/wallpaper_picker_entry_background_top_corner_radius"
+        android:topLeftRadius="@dimen/customization_option_entry_corner_radius_large"
+        android:topRightRadius="@dimen/customization_option_entry_corner_radius_large"
         android:bottomLeftRadius="@dimen/customization_option_entry_corner_radius_large"
         android:bottomRightRadius="@dimen/customization_option_entry_corner_radius_large" />
 </shape>

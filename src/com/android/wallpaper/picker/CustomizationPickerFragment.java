@@ -15,6 +15,8 @@
  */
 package com.android.wallpaper.picker;
 
+import static com.android.wallpaper.util.ActivityUtils.isSUWMode;
+
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Intent;
@@ -23,12 +25,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.activity.ComponentActivity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.NestedScrollView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -169,6 +176,28 @@ public class CustomizationPickerFragment extends AppbarFragment implements
                 }
         );
         ((ViewGroup) view).setTransitionGroup(true);
+        if (isSUWMode(getActivity())) {
+            Button doneButton = view.findViewById(R.id.done_button);
+            doneButton.setOnClickListener(v -> {
+                // Finish activity or apply changes
+                requireActivity().finish();
+            });
+            ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.button_bar),
+                    (v, insets) -> {
+                        Insets inset = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                        int bottomPadding = getResources()
+                                .getDimensionPixelSize(R.dimen.bottom_actions_top_padding)
+                                + inset.bottom;
+                        v.setPadding(
+                                v.getPaddingLeft(),
+                                v.getPaddingTop(),
+                                v.getPaddingRight(),
+                                bottomPadding);
+                        return insets;
+                    });
+        } else {
+            view.findViewById(R.id.button_bar).setVisibility(View.GONE);
+        }
         return view;
     }
 

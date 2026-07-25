@@ -309,4 +309,16 @@
         <item name="android:textAlignment">center</item>
         <item name="android:paddingVertical">8dp</item>
     </style>
+
+    <style name="Button.Primary" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:buttonStyle">@style/Button.Primary</item>
+        <item name="android:theme">@style/Button.Primary</item>
+        <item name="buttonStyle">@style/Button.Primary</item>
+        <item name="android:fontFamily">google-sans-medium</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:buttonCornerRadius">24dp</item>
+    </style>
+
 </resources>

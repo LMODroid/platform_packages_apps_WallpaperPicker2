@@ -185,14 +185,11 @@ public class CustomizationPickerFragment extends AppbarFragment implements
             ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.button_bar),
                     (v, insets) -> {
                         Insets inset = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
-                        int bottomPadding = getResources()
-                                .getDimensionPixelSize(R.dimen.bottom_actions_top_padding)
-                                + inset.bottom;
                         v.setPadding(
                                 v.getPaddingLeft(),
                                 v.getPaddingTop(),
                                 v.getPaddingRight(),
-                                bottomPadding);
+                                inset.bottom + v.getPaddingBottom());
                         return insets;
                     });
         } else {

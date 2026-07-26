@@ -46,7 +46,7 @@
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
         android:paddingTop="16dp"
-        android:paddingBottom="24dp">
+        android:paddingBottom="8dp">
 
         <Button
             android:id="@+id/done_button"
